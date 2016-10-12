@@ -1,0 +1,43 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          firstboot.local
+# Required-Start:    $all
+# Required-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:
+# Short-Description: Run /etc/firstboot.local if it exist
+### END INIT INFO
+
+
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+. /lib/init/vars.sh
+. /lib/lsb/init-functions
+
+do_start() {
+  if [ -x /etc/firstboot.local ]; then
+          [ "$VERBOSE" != no ] && log_begin_msg "Running local firstboot scripts (/etc/firstboot.local)"
+    /etc/firstboot.local
+    ES=$?
+    [ "$VERBOSE" != no ] && log_end_msg $ES
+    return $ES
+  fi
+}
+
+case "$1" in
+  start)
+    do_start
+    ;;
+  restart|reload|force-reload)
+    echo "Error: argument '$1' not supported" >&2
+    exit 3
+    ;;
+  stop|status)
+    # No-op
+    exit 0
+    ;;
+  *)
+    echo "Usage: $0 start|stop" >&2
+    exit 3
+    ;;
+esac

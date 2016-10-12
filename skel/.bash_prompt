@@ -1,0 +1,87 @@
+#!/bin/bash
+# Modified @gf3's Sexy Bash Prompt, inspired by "Extravagant Zsh Prompt"
+# Modified from from https://github.com/gf3/dotfiles
+# http://stackoverflow.com/questions/16715103/bash-prompt-with-last-exit-code
+PROMPT_COMMAND=__prompt_command
+
+if [[ $COLORTERM == gnome-* && $TERM == xterm ]] && infocmp gnome-256color >/dev/null 2>&1; then
+  export TERM=gnome-256color
+elif infocmp xterm-256color >/dev/null 2>&1; then
+  export TERM=xterm-256color
+fi
+
+if tput setaf 1 &>/dev/null; then
+  tput sgr0
+  #  if [[ $(tput colors) -ge 256 ]] 2>/dev/null; then
+  #  else
+  #BLACK=$(tput setaf 0)
+  RED=$(tput setaf 1)
+  GREEN=$(tput setaf 2)
+  YELLOW=$(tput setaf 3)
+  BLUE=$(tput setaf 4)
+  PURPLE=$(tput setaf 5)
+  CYAN=$(tput setaf 6)
+  WHITE=$(tput setaf 7)
+  #  fi
+  BOLD=$(tput bold)
+  RESET=$(tput sgr0)
+  ROOT=$(tput setab 1)$(tput setaf 7)
+else
+  RED="\033[0;31m"
+  GREEN="\033[0;32m"
+  YELLOW="\033[0;33m"
+  BLUE="\033[0;34m"
+  PURPLE="\033[0;35m"
+  CYAN="\033[0;36m"
+  WHITE="\033[0;37m"
+  BOLD=""
+  RESET="\033[m"
+  ROOT="\033[30;41m"
+fi
+
+export RED
+export GREEN
+export YELLOW
+export BLUE
+export PURPLE
+export CYAN
+export WHITE
+export BOLD
+export RESET
+export ROOT
+
+function parse_git_dirty() {
+  [[ $(git status 2>/dev/null | tail -n1) != *"working directory clean"* ]] && echo "*"
+}
+
+function parse_git_branch() {
+  git branch --no-color 2>/dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/(\1$(parse_git_dirty))/"
+}
+
+function __prompt_command() {
+  # this needs to be first
+  local EXITCODE="$?"
+  local USER="\[$GREEN\]\u"
+  if [ "$(whoami)" = "root" ]; then
+    local USER="\[$ROOT\]\u"
+  fi
+  local HOST="\[$BLUE\]@\[$CYAN\]\h"
+  local DIR="\[$BLUE\]:\[$YELLOW\]\w\[$RESET\]"
+  local GIT="\[$WHITE\]\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" \")\$(parse_git_branch)"
+  local DATE="\[$PURPLE\]\D{%Y-%m-%d %H:%M:%S %Z%z}"
+  local EXIT="\[$ROOT\]exit $EXITCODE"
+  if [ "$EXITCODE" = "0" ]; then
+    local EXIT="\[$GREEN\]exit $EXITCODE"
+  fi
+  local DEFAULT1="\[$PURPLE\]"
+  local DEFAULT2="\[$YELLOW\]"
+  local SIGN="%"
+  if [ "$(whoami)" = "root" ]; then
+    local SIGN="#"
+  fi
+  local NEWLINE="\[$RESET\]\n"
+
+  export PS1="${USER}${HOST}${DIR}${GIT} ${DATE} ${EXIT}${NEWLINE}${DEFAULT1}${SIGN} \[$RESET\]"
+
+  export PS2="${DEFAULT2}? \[$RESET\]"
+}

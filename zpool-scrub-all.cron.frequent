@@ -1,0 +1,4 @@
+PATH="/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin"
+# 5th argument: 1=Monday, 0 or 7=Sunday
+# 0 0 * * 0 = run on Sunday AM/midnight
+0 0 * * 0 root zpool-scrub-all

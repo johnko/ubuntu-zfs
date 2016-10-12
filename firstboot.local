@@ -1,0 +1,110 @@
+#!/usr/bin/env bash
+set -e
+set -x
+
+# if root email is forwarded, send email to root when booting/rebooted
+if [ -f /root/.forward ]; then
+  MAILTO=$(head -n1 /root/.forward)
+  [ "x" = "x${MAILTO}" ] && MAILTO="root"
+  function sendmail_or_true() {
+    sendmail "${MAILTO}" || true
+  }
+  sendmail_or_true <<EOF
+Subject: system booted - $(hostname -f)
+
+system booted - $(hostname -f)
+time of boot - $(date)
+EOF
+fi
+
+TRIGGER="/etc/firstboot"
+[ ! -f "${TRIGGER}" ] && exit 0
+
+OLD_UMASK=$(umask)
+umask 0077
+exec 1> >(tee /var/log/02-firstboot.log /dev/console)
+exec 2>&1
+umask "${OLD_UMASK}"
+
+cd /root/ubuntu-zfs
+
+. ./env.sh
+
+if [ -z "${NEWUSER}" ]; then
+  NEWUSER=ubuntu
+fi
+if [ -z "${ZFS_ROOT_POOL}" ]; then
+  ZFS_ROOT_POOL=system
+fi
+
+# add user if not exist
+id "${NEWUSER}" || ./add-user.sh "${NEWUSER}"
+grep -v "GMAIL" ./env.sh >"/home/${NEWUSER}/.env.sh"
+chown "${NEWUSER}:${NEWUSER}" "/home/${NEWUSER}/.env.sh"
+grep -v "GMAIL" ./env.sh >/root/.env.sh
+
+# forward root mail to user
+OUTFILE="/root/.forward"
+if [ ! -f "${OUTFILE}" ]; then
+  touch "${OUTFILE}"
+  chmod 600 "${OUTFILE}"
+  if [ -n "${GMAIL_USER}" ]; then
+    cat >"${OUTFILE}" <<EOF
+${GMAIL_USER}
+EOF
+  else
+    cat >"${OUTFILE}" <<EOF
+${NEWUSER}
+EOF
+  fi
+fi
+
+ZFSSWAPDEV="${ZFS_ROOT_POOL}/swap"
+SWAPDEV="/dev/zvol/${ZFSSWAPDEV}"
+OUTFILE="/etc/fstab"
+if ! zfs list "${ZFSSWAPDEV}"; then
+  # create if it doesn't exist
+  zfs create -V 4G -b "$(getconf PAGESIZE)" -o compression=zle \
+    -o logbias=throughput -o sync=always \
+    -o primarycache=metadata -o secondarycache=none \
+    -o com.sun:auto-snapshot=false "${ZFSSWAPDEV}"
+  mkswap -f "${SWAPDEV}"
+fi
+if ! grep -q "${SWAPDEV}" "${OUTFILE}"; then
+  if [ -f "${OUTFILE}" ] && [ ! -f "${OUTFILE}.original" ]; then
+    cp -a "${OUTFILE}" "${OUTFILE}.original"
+  fi
+  cat >>"${OUTFILE}" <<EOF
+${SWAPDEV} none swap defaults 0 0
+EOF
+  swapon -av
+fi
+
+./apt-install.sh
+
+./setup-networkmanager-dns.sh
+
+./setup-unattended-upgrades.sh
+
+./setup-nullmailer.sh
+
+./setup-zfs-event-daemon.sh
+
+./setup-zpool-scrub-all.sh
+
+./backup-originals.sh
+
+#./disable-services.sh
+
+./setup-zfs-auto-snapshot.sh
+
+rm "${TRIGGER}"
+
+sync
+
+zfs snapshot -r "${ZFS_ROOT_POOL}"@01-firstboot
+zfs destroy "${ZFSSWAPDEV}"@01-firstboot
+
+sync
+
+reboot -f

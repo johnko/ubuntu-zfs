@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -e
+set -x
+
+PREFIX="IP address:"
+IP=$(/etc/ip.local)
+
+OUTFILE="/etc/issue"
+/bin/sed -i "s,${PREFIX}.*,${PREFIX} ${IP}," "${OUTFILE}"
+if ! /bin/grep -q "^${PREFIX}" "${OUTFILE}"; then
+  /bin/grep -v '^$' "${OUTFILE}" | /usr/bin/tee "${OUTFILE}"
+  /bin/cat >>"${OUTFILE}" <<EOF
+${PREFIX} ${IP}
+
+EOF
+fi
+
+# if root email is forwarded, send email to root when ip change
+if [ -f /root/.forward ]; then
+  MAILTO=$(head -n1 /root/.forward)
+  [ "x" = "x${MAILTO}" ] && MAILTO="root"
+  function sendmail_or_true() {
+    sendmail "${MAILTO}" || true
+  }
+  sendmail_or_true <<EOF
+Subject: system ip changed - $(hostname -f)
+
+system ip changed - $(hostname -f)
+time of ip change - $(date)
+IP - ${IP}
+EOF
+fi
