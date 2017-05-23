@@ -183,6 +183,7 @@ for i in ${DISKS}; do
   ZDATA_VDEVS="${ZDATA_VDEVS} ${i}3"
   NUM_VDEVS=$((NUM_VDEVS + 1))
 done
+sleep 5
 zpool destroy "${ZFS_ROOT_POOL}" || true
 sleep 2
 for i in ${ZPOOL_VDEVS}; do
