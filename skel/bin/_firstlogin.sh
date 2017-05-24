@@ -17,7 +17,7 @@ while ! ping -c 1 archive.ubuntu.com; do
 done
 
 _setup-golang.sh
-for i in ~/bin/_setup-*; do
+for i in "${HOME}/bin/_setup"-*; do
   "${i}"
 done
 
