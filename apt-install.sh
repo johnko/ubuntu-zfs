@@ -127,6 +127,7 @@ linux-image-generic
 debootstrap gdisk zfs-initramfs mdadm
 grub-pc
 openssh-server
+openntpd
 rsync
 git
 curl
