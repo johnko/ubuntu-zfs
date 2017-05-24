@@ -2,8 +2,10 @@
 set -e
 set -x
 
-xfconf-query -c xfce4-power-manager -n -p "/xfce4-power-manager/blank-on-ac" -t int -s 0
-xfconf-query -c xfce4-power-manager -n -p "/xfce4-power-manager/dpms-enabled" -t bool -s false
+if which xfconf-query; then
+	xfconf-query -c xfce4-power-manager -n -p "/xfce4-power-manager/blank-on-ac" -t int -s 0
+	xfconf-query -c xfce4-power-manager -n -p "/xfce4-power-manager/dpms-enabled" -t bool -s false
+fi
 
 cat >~/.xscreensaver <<EOF
 # XScreenSaver Preferences File
@@ -40,14 +42,14 @@ dpmsOff:	4:00:00
 grabDesktopImages:  False
 grabVideoFrames:    False
 chooseRandomImages: False
-imageDirectory:	
+imageDirectory:
 
 mode:		off
 selected:	21
 
 textMode:	date
 textLiteral:	XScreenSaver
-textFile:	
+textFile:
 textProgram:	fortune
 textURL:	http://fridge.ubuntu.com/node/feed
 
