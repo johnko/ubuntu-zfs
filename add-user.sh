@@ -22,9 +22,9 @@ fi
 NEWSKEL="/etc/skel"
 
 # password is admin
-useradd -d "${NEWHOME}" "${NEWGROUPS}" -m -k "${NEWSKEL}" -p '$6$ZukFU3LL$jGgdl2h6oSt/j06odeBaTPyWCwobck.GQA1DJVwEmYkji1DMDMj3WA66dCBpCer5hpavx8ArScr5lLvS4VXMg/' -s /bin/bash -U "${NEWUSER}"
+useradd -d "${NEWHOME}" ${NEWGROUPS} -m -k "${NEWSKEL}" -p '$6$ZukFU3LL$jGgdl2h6oSt/j06odeBaTPyWCwobck.GQA1DJVwEmYkji1DMDMj3WA66dCBpCer5hpavx8ArScr5lLvS4VXMg/' -s /bin/bash -U "${NEWUSER}"
 
-#usermod -a -G ${NEWGROUPS} ${NEWUSER}
+#usermod -a ${NEWGROUPS} ${NEWUSER}
 
 install -d -m 700 -o "${NEWUSER}" -g "${NEWUSER}" "${NEWHOME}/.vim"
 install -d -m 700 -o "${NEWUSER}" -g "${NEWUSER}" "${NEWHOME}/.vim/backups"
