@@ -2,7 +2,7 @@
 set -e
 set -x
 
-VERSION=0.12.3
+VERSION=1.0.0
 
 which vagrant || sudo apt-get install --yes vagrant
 
