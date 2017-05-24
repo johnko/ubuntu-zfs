@@ -145,6 +145,7 @@ fail2ban
 shellcheck
 python-pygments
 vagrant
+linux-headers-generic
 virtualbox-5.0
 "
 
