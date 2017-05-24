@@ -2,8 +2,9 @@
 set -e
 set -x
 
-which python || sudo apt-get install --yes python
+which python2.7 || sudo apt-get install --yes python2.7
+which pip || sudo apt-get install --yes python-pip
 
-sudo easy_install pip
+sudo pip install pip
 
 sudo pip install ansible
