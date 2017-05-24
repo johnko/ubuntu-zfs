@@ -128,6 +128,7 @@ debootstrap gdisk zfs-initramfs mdadm
 grub-pc
 openssh-server
 openntpd
+ntpdate
 rsync
 git
 curl
