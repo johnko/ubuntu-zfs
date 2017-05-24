@@ -3,7 +3,13 @@ set -e
 set -x
 
 _disable-automount.sh
+_screensaver-disable.sh
 _setup-sudoers.sh
+_ssh-keygen.sh
+
+for i in "${HOME}/bin/docker-compose"-*; do
+  ln -sf ${i} "${HOME}/bin/docker-compose"
+done
 
 # Wait for network
 while ! ping -c 1 archive.ubuntu.com; do
@@ -14,6 +20,6 @@ _setup-golang.sh
 for i in ~/bin/_setup-*; do
   "${i}"
 done
-#_docker-tmpfs.sh
+
 #glances.sh
 _backup-apt-cache.sh
