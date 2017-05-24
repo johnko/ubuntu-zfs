@@ -153,11 +153,16 @@ while ! ping -c 1 archive.ubuntu.com; do
   sleep 1
 done
 
+# Get ZFS packages
 apt-add-repository universe
 if [ -z "${RSYNC_CACHE_SERVER}" ]; then
   apt-get update
 fi
 apt-get install --yes debootstrap gdisk zfs-initramfs mdadm
+
+# Sync time
+apt-get install --yes ntpdate
+ntpdate pool.ntp.org
 
 ZPOOL_VDEVS=""
 ZDATA_VDEVS=""
