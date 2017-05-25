@@ -2,12 +2,25 @@
 set -e
 set -x
 
-which python2.7 || sudo apt-get install --yes python2.7
+export DEBIAN_FRONTEND=noninteractive
 
-which pip || sudo apt-get install --yes python-pip
-sudo pip install --upgrade pip
+# Dependency for virtualenv
+sudo apt-get install -y build-essential python-dev libffi-dev
+which virtualenv || sudo apt-get install --yes python-virtualenv
 
-# dependency for ansible
-sudo apt-get install --yes libssl-dev
+# Dependency for ansible
+sudo apt-get install -y libssl-dev
 
-sudo pip install ansible
+# Install ansible in a virtualenv
+VENV_FOLDER="venv"
+virtualenv ${VENV_FOLDER}
+. ${VENV_FOLDER}/bin/activate
+pip install --upgrade pip
+pip install ansible
+
+# Instructions to user
+set +x
+echo "Ansible setup complete!"
+echo "Now you can:"
+echo "    source ${VENV_FOLDER}/bin/activate"
+echo "    ansible-playbook ..."
