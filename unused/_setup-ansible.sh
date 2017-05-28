@@ -5,18 +5,18 @@ set -x
 export DEBIAN_FRONTEND=noninteractive
 
 # Dependency for virtualenv
-sudo apt-get install -y build-essential python-dev libffi-dev
+sudo apt-get install --yes build-essential python-dev libffi-dev
 which virtualenv || sudo apt-get install --yes python-virtualenv
 
 # Dependency for ansible
-sudo apt-get install -y libssl-dev
+sudo apt-get install --yes libssl-dev
 
 # Install ansible in a virtualenv
 VENV_FOLDER="venv"
 virtualenv ${VENV_FOLDER}
 . ${VENV_FOLDER}/bin/activate
 pip install --upgrade pip
-pip install ansible
+pip install --upgrade ansible
 
 # Instructions to user
 set +x
