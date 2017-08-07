@@ -2,7 +2,7 @@
 set -e
 set -x
 
-VERSION=1.8
+VERSION=1.8.3
 
 if ! which go; then
   FILE="go${VERSION}.linux-amd64.tar.gz"
