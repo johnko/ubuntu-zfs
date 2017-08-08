@@ -17,6 +17,12 @@ time of boot - $(date)
 EOF
 fi
 
+if dmesg | grep -q -i "macbookpro10,1"; then
+  # Enable display brightness keys
+  # source https://askubuntu.com/questions/370857/cant-adjust-screen-brightness-on-macbook-pro-10-1-ubuntu-13-10
+  setpci -v -H1 -s 00:01.00 BRIDGE_CONTROL=0
+fi
+
 TRIGGER="/etc/firstboot"
 [ ! -f "${TRIGGER}" ] && exit 0
 

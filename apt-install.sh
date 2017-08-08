@@ -265,4 +265,15 @@ libxcb-xtest0
         ;;
     esac
   done
+
+  if dmesg | grep -q -i "macbookpro10,1"; then
+    # Enable wifi
+    # source https://askubuntu.com/questions/470153/no-wireless-when-install-14-04-on-macbook-pro
+    if lspci -nn | grep -q -i "802.11"; then
+      apt-add-repository multiverse || true
+      apt-get update
+      apt-get install --yes firmware-b43-installer
+    fi
+  fi
+
 fi
