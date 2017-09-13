@@ -2,9 +2,6 @@
   core:
     telemetryConsent: "no"
     customFileTypes:
-      'source.ruby': [
-        'pp'
-      ]
       'source.shell': [
         'Dockerfile'
         'bash_completion'
