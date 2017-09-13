@@ -107,6 +107,9 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # Custom PATH
 [ -f ~/.bash_path ] && . ~/.bash_path
 
+# Custom completion
+[ -f ~/.bash_completion ] && . ~/.bash_completion
+
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).

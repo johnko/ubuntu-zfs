@@ -1,12 +1,17 @@
-#!/bin/bash
+#!/usr/bin/env bash
 [ ! -e ~/.ssh ] && install -d -m 700 ~/.ssh
 grep -q "HashKnownHosts" ~/.ssh/config || tee -a ~/.ssh/config <<EOF
 HashKnownHosts no
 EOF
+for i in ~/.vim/backups ~/.vim/swaps ~/.vim/undo; do
+  [ ! -d $i ] && mkdir -p $i
+done
 
+alias ls="ls -G"
 alias g=git
 alias iftop="sudo /usr/sbin/iftop -nBP"
 alias dd="sudo /bin/dd status=progress"
+alias free="top -l 1 -s 0 | grep PhysMem | sed 's, (.*),,'"
 
 alias rsynca="rsync -viaP"
 alias rsyncc="rsync -virchlmP"

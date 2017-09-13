@@ -1,0 +1,19 @@
+"*":
+  core:
+    telemetryConsent: "no"
+    customFileTypes:
+      'source.ruby': [
+        'pp'
+      ]
+      'source.shell': [
+        'Dockerfile'
+        'bash_completion'
+        'bash_path'
+        'bash_prompt'
+        'profile'
+      ]
+  editor: {}
+  "exception-reporting":
+    userId: "0969cc55-c0f6-4ece-9da6-c76a5d7da29a"
+  welcome:
+    showOnStartup: false

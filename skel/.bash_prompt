@@ -1,4 +1,3 @@
-#!/bin/bash
 # Modified @gf3's Sexy Bash Prompt, inspired by "Extravagant Zsh Prompt"
 # Modified from from https://github.com/gf3/dotfiles
 # http://stackoverflow.com/questions/16715103/bash-prompt-with-last-exit-code
@@ -51,7 +50,7 @@ export RESET
 export ROOT
 
 function parse_git_dirty() {
-  [[ $(git status 2>/dev/null | tail -n1) != *"working directory clean"* ]] && echo "*"
+  [[ $(git status 2>/dev/null | tail -n1) != *"working tree clean"* ]] && echo "*"
 }
 
 function parse_git_branch() {
