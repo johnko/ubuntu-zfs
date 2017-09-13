@@ -20,6 +20,7 @@ brew install curl
 
 for i in \
   bash-completion \
+  jq \
   wget \
   git \
   caskroom/cask/google-chrome \
@@ -77,6 +78,8 @@ docker-machine inspect default >/dev/null 2>&1 || docker-machine create -d virtu
 
 # Set proxy for dockerd service so you can pull through proxy
 #docker-machine ssh
+#mkdir -p /etc/docker/certs.d/reg.my.domain:5001
+#echo | openssl s_client -servername reg.my.domain -connect reg.my.domain:5001 2>/dev/null | openssl x509 >> /etc/docker/certs.d/reg.my.domain:5001/ca.crt
 #sudo tee /var/lib/boot2docker/profile <<EOF
 cat <<EOF
 EXTRA_ARGS='
