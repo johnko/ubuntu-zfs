@@ -2,11 +2,7 @@
 set -e
 set -x
 
-# Proxy for your current Terminal session
-#export http_proxy="http://gateway:8000"
-#export https_proxy="${http_proxy}"
-# No proxy for IP of the docker-machine
-#export no_proxy="192.168.99.100,more.domains"
+eval $(_environment.sh)
 
 # Xcode (for git)
 xcode-select --install || true
@@ -15,9 +11,11 @@ xcode-select --install 2>&1 | grep "already installed"
 # Homebrew
 ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
+# Update curl
 brew install curl
 [ ! -e /usr/local/bin/curl ] && ln -s ../Cellar/curl/7.55.1/bin/curl /usr/local/bin/curl
 
+# Install other tools
 for i in \
   bash-completion \
   jq \
@@ -40,16 +38,34 @@ for i in \
   brew install $i || brew upgrade $i
 done
 
-# Linting tools via NPM
+# Update npm
 npm install --global npm
 
+# Linting tools via NPM
 npm install --global \
   yaml-js \
   standard
 
+# Temporary use Internet gem source
+printf -- "---\n:backtrace: false\n:bulk_threshold: 1000\n:update_sources: true\n:verbose: true\ngem: --no-ri --no-rdoc\nbenchmark: false\n" > ~/.gemrc
+
 # Linting tools via Gem
 gem install \
-  puppet-lint
+  puppet-lint \
+  bundler
+
+# Setup use of Artifactory gem source
+printf -- "---\n:backtrace: false\n:bulk_threshold: 1000\n:sources:\n- ${GEM_SOURCE}\n:update_sources: true\n:verbose: true\ngem: --no-ri --no-rdoc\nbenchmark: false\n" > ~/.gemrc
+bundle config ${artifactory_host} ${artifactory_username}:${artifactory_password}
+# bundle install
+
+# Configure puppet module_repository
+[ ! -d ~/.puppetlabs/etc/puppet ] && mkdir -p ~/.puppetlabs/etc/puppet
+[ ! -f ~/.puppetlabs/etc/puppet/puppet.conf ] && touch ~/.puppetlabs/etc/puppet/puppet.conf
+grep -q "module_repository" ~/.puppetlabs/etc/puppet/puppet.conf || tee -a ~/.puppetlabs/etc/puppet/puppet.conf <<EOF
+[main]
+module_repository=${BEAKER_FORGE_HOST}
+EOF
 
 # Atom Editor packages
 apm install \
@@ -65,12 +81,13 @@ apm install \
   linter-js-yaml \
   linter-js-standard \
   language-puppet \
-  linter-puppet-lint
+  linter-puppet-lint \
+  atom-alignment
 
 # Docker-Machine
 docker-machine inspect default >/dev/null 2>&1 || docker-machine create -d virtualbox default
 
-# Set environment variables for docker
+# Set environment variables for docker before using docker-cli
 #eval $(docker-machine env default)
 
 # Now you can list docker containers
@@ -78,8 +95,11 @@ docker-machine inspect default >/dev/null 2>&1 || docker-machine create -d virtu
 
 # Set proxy for dockerd service so you can pull through proxy
 #docker-machine ssh
-#mkdir -p /etc/docker/certs.d/reg.my.domain:5001
-#echo | openssl s_client -servername reg.my.domain -connect reg.my.domain:5001 2>/dev/null | openssl x509 >> /etc/docker/certs.d/reg.my.domain:5001/ca.crt
+#DOCKER_REGISTRY_HOST="reg.my.domain"
+#DOCKER_REGISTRY_PORT="5001"
+#DOCKER_REGISTRY="${DOCKER_REGISTRY_HOST}:${DOCKER_REGISTRY_PORT}"
+#mkdir -p /etc/docker/certs.d/${DOCKER_REGISTRY}
+#echo | openssl s_client -servername ${DOCKER_REGISTRY_HOST} -connect ${DOCKER_REGISTRY} 2>/dev/null | openssl x509 >> /etc/docker/certs.d/${DOCKER_REGISTRY}/ca.crt
 #sudo tee /var/lib/boot2docker/profile <<EOF
 cat <<EOF
 EXTRA_ARGS='
