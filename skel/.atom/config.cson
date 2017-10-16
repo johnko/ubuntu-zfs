@@ -10,7 +10,8 @@
         "profile"
       ]
     telemetryConsent: "no"
-  editor: {}
+  editor:
+    showIndentGuide: true
   "exception-reporting":
     userId: "0969cc55-c0f6-4ece-9da6-c76a5d7da29a"
   "linter-puppet-lint":
