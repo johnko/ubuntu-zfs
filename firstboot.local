@@ -74,6 +74,10 @@ if ! zfs list "${ZFSSWAPDEV}"; then
     -o logbias=throughput -o sync=always \
     -o primarycache=metadata -o secondarycache=none \
     -o com.sun:auto-snapshot=false "${ZFSSWAPDEV}"
+  while [ ! -e ${SWAPDEV} ]; do
+    echo -n '.'
+    sleep 1
+  done
   mkswap -f "${SWAPDEV}"
 fi
 if ! grep -q "${SWAPDEV}" "${OUTFILE}"; then
