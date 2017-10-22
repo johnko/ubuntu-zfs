@@ -8,6 +8,9 @@ for i in ~/.vim/backups ~/.vim/swaps ~/.vim/undo; do
 done
 
 alias g=git
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
 
 # MacOs aliases
 if [ -e /Users ]; then
