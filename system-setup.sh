@@ -131,6 +131,11 @@ install -d -m 755 /usr/local
 install -d -m 755 /usr/local/bin
 ln -sf /etc/ip.local /usr/local/bin/ip.local
 
+# Backup issue file
+OUTFILE="/etc/issue"
+if [ -f "${OUTFILE}" ] && [ ! -f "${OUTFILE}.original" ]; then
+  cp -a "${OUTFILE}" "${OUTFILE}.original"
+fi
 install -m 755 update-issue.local /etc/update-issue.local
 ln -sf /etc/update-issue.local /etc/network/if-down.d/update-issue
 ln -sf /etc/update-issue.local /etc/network/if-up.d/update-issue

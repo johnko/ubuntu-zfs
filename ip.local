@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
-set -x
+#set -x
 
 for i in $(/sbin/ip link show | /bin/grep '^[0-9]' | /bin/egrep -v '(LOOPBACK|DOWN|NO-CARRIER)' | /usr/bin/awk -F: '{print $2}'); do
-  /sbin/ifconfig "${i}" | /bin/grep 'inet addr' | /usr/bin/awk -F: '{print $2}' | /usr/bin/awk '{print $1}'
+  /sbin/ifconfig "${i}" | /bin/grep 'inet addr' | /usr/bin/awk -F: '{print $2}' | /usr/bin/awk '{print $1}' | /usr/bin/tr '\n' ' '
 done
