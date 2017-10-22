@@ -286,6 +286,12 @@ cp -a ./ "${TARGET}/root/ubuntu-zfs"
 
 chroot "${TARGET}" /root/ubuntu-zfs/system-setup.sh
 
+cat <<EOF
+###################
+#  End of script  #
+###################
+EOF
+
 cp -a /var/log/00-ubuntu-zfs-install.log "${TARGET}/var/log/00-ubuntu-zfs-install.log"
 
 sync
