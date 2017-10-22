@@ -10,11 +10,12 @@ OUTFILE="/etc/issue"
 # Ubuntu 16.04.2 LTS \n \l
 /bin/sed -i "s,${PREFIX}.*,${PREFIX} ${IP}," "${OUTFILE}"
 if ! /bin/grep -q "^${PREFIX}" "${OUTFILE}"; then
-  /bin/grep -v '^$' "${OUTFILE}" | /usr/bin/tee "${OUTFILE}"
-  /bin/cat >>"${OUTFILE}" <<EOF
+  /bin/grep -v '^$' "${OUTFILE}" >"${OUTFILE}.tmp"
+  /bin/cat >>"${OUTFILE}.tmp" <<EOF
 ${PREFIX} ${IP}
 
 EOF
+  /bin/mv "${OUTFILE}.tmp" "${OUTFILE}"
 fi
 
 # if root email is forwarded, send email to root when ip change
