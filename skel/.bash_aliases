@@ -7,40 +7,44 @@ for i in ~/.vim/backups ~/.vim/swaps ~/.vim/undo; do
   [ ! -d $i ] && mkdir -p $i
 done
 
-alias ls="ls -G"
 alias g=git
-alias iftop="sudo /usr/sbin/iftop -nBP"
-alias dd="sudo /bin/dd status=progress"
-alias free="top -l 1 -s 0 | grep PhysMem | sed 's, (.*),,'"
+
+# MacOs aliases
+if [ -e /Users ]; then
+  alias ls="ls -G"
+  alias free="top -l 1 -s 0 | grep PhysMem | sed 's, (.*),,'"
+else
+  alias iftop="sudo /usr/sbin/iftop -nBP"
+  alias dd="sudo /bin/dd status=progress"
+  alias zl="sudo zfs list -oname,lused,usedds,usedchild,usedsnap,used,avail,refer,mountpoint,mounted,canmount"
+  alias zll="sudo zfs list -oname,dedup,compress,compressratio,checksum,sync,quota,copies,atime,devices,exec,rdonly,setuid,xattr,acltype,aclinherit"
+  alias zls="sudo zfs list -t snap -oname,used,avail,refer"
+  alias zpl="sudo zpool list -oname,size,alloc,free,cap,dedup,health,frag,ashift,freeing,expandsz,expand,replace,readonly,altroot"
+  alias zs="sudo zpool status"
+  alias zio="sudo zpool iostat"
+  function whatismydhcpserver() {
+    for i in $(ps aux | grep -o '[/]var/lib/NetworkManager/\S*.lease') \
+      $(ps aux | grep -o '[/]var/lib/dhcp/dhclient\S*.leases'); do
+      [ -f "${i}" ] && grep "dhcp-server-identifier" "${i}"
+    done
+  }
+  function copypubkey2clipboard() {
+    for i in ~/.ssh/id_*.pub; do
+      [ -e "${i}" ] && cat "${i}" | xsel --clipboard
+    done
+  }
+fi
 
 alias rsynca="rsync -viaP"
 alias rsyncc="rsync -virchlmP"
 alias rsynct="rsync -virthlmP"
 
-alias zl="sudo zfs list -oname,lused,usedds,usedchild,usedsnap,used,avail,refer,mountpoint,mounted,canmount"
-alias zll="sudo zfs list -oname,dedup,compress,compressratio,checksum,sync,quota,copies,atime,devices,exec,rdonly,setuid,xattr,acltype,aclinherit"
-alias zls="sudo zfs list -t snap -oname,used,avail,refer"
-alias zpl="sudo zpool list -oname,size,alloc,free,cap,dedup,health,frag,ashift,freeing,expandsz,expand,replace,readonly,altroot"
-alias zs="sudo zpool status"
-alias zio="sudo zpool iostat"
-
 function t() {
   tmux attach || tmux
-}
-function whatismydhcpserver() {
-  for i in $(ps aux | grep -o '[/]var/lib/NetworkManager/\S*.lease') \
-    $(ps aux | grep -o '[/]var/lib/dhcp/dhclient\S*.leases'); do
-    [ -f "${i}" ] && grep "dhcp-server-identifier" "${i}"
-  done
 }
 function firstlastline() {
   head -n1 "${1}"
   tail -n1 "${1}"
-}
-function copypubkey2clipboard() {
-  for i in ~/.ssh/id_*.pub; do
-    [ -e "${i}" ] && cat "${i}" | xsel --clipboard
-  done
 }
 # Usage: json '{"foo":42}' or echo '{"foo":42}' | json
 function json() { # Syntax-highlight JSON strings or files
