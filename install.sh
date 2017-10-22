@@ -295,4 +295,8 @@ zpool export "${ZFS_ROOT_POOL}"
 
 sync
 
+if mount | grep -q "/cdrom" ; then
+  umount -l /cdrom || true
+fi
+
 reboot -f
