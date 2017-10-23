@@ -135,15 +135,15 @@ for i in ${DISKS}; do
 done
 
 if [ -n "${RSYNC_CACHE_SERVER}" ]; then
-  rsync -virtP --exclude lock --exclude partial --exclude .DS_Store "${RSYNC_CACHE_SERVER}/" /root/.apt-cache/ || true
+  rsync -virtP --exclude lock --exclude partial --exclude .DS_Store "${RSYNC_CACHE_SERVER}/" /root/.apt-cache/
   install -d -m 755 /var/lib
   install -d -m 755 /var/lib/apt
   install -d -m 755 /var/lib/apt/lists
   install -d -m 755 /var/cache
   install -d -m 755 /var/cache/apt
   install -d -m 755 /var/cache/apt/archives
-  rsync -virtP --exclude lock --exclude partial /root/.apt-cache/lists/ /var/lib/apt/lists/ || true
-  rsync -virtP --exclude lock --exclude partial /root/.apt-cache/apt/ /var/cache/apt/ || true
+  rsync -virtP --exclude lock --exclude partial /root/.apt-cache/lists/ /var/lib/apt/lists/
+  rsync -virtP --exclude lock --exclude partial /root/.apt-cache/apt/ /var/cache/apt/
   rm -fr /root/.apt-cache/lists
   rm -fr /root/.apt-cache/apt
 fi
@@ -268,11 +268,11 @@ chmod 1777 "${TARGET}/var/tmp"
 install -d -m 755 "${TARGET}/var/lib"
 install -d -m 755 "${TARGET}/var/lib/apt"
 install -d -m 755 "${TARGET}/var/lib/apt/lists"
-rsync -virtP --exclude lock --exclude partial /var/lib/apt/lists/ "${TARGET}/var/lib/apt/lists/" || true
+rsync -virtP --exclude lock --exclude partial /var/lib/apt/lists/ "${TARGET}/var/lib/apt/lists/"
 install -d -m 755 "${TARGET}/var/cache"
 install -d -m 755 "${TARGET}/var/cache/apt"
 install -d -m 755 "${TARGET}/var/cache/apt/archives"
-rsync -virtP --exclude lock --exclude partial /var/cache/apt/ "${TARGET}/var/cache/apt/" || true
+rsync -virtP --exclude lock --exclude partial /var/cache/apt/ "${TARGET}/var/cache/apt/"
 [ -e /root/.apt-cache ] && mv /root/.apt-cache "${TARGET}/root/.apt-cache"
 
 debootstrap "${UBUNTU_CODENAME}" "${TARGET}"
