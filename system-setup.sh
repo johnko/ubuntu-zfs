@@ -149,3 +149,9 @@ ln -sf /etc/init.d/firstboot /etc/rc5.d/S99firstboot
 touch /etc/firstboot
 
 zfs snapshot -r "${ZFS_ROOT_POOL}"@00-install
+
+cat <<EOF
+###################
+#  End of script  #
+###################
+EOF
