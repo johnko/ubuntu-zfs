@@ -13,3 +13,7 @@ install -d "${PREFIX}/sbin"
 install zpool-scrub-all.sh "${PREFIX}/sbin/zpool-scrub-all"
 # disable /usr/lib/zfs-linux/scrub
 chmod -x /usr/lib/zfs-linux/scrub
+
+if [ -n "${GMAIL_USER}" ]; then
+  sed -i -e "s:^MAILTO=.*:MAILTO=${GMAIL_USER}:g" /etc/cron.d/zpool-scrub-all
+fi
