@@ -30,9 +30,9 @@ set expandtab
 set smarttab
 set nojoinspaces
 set shiftround
-set shiftwidth=2
-set softtabstop=2
-set tabstop=2
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
 nnoremap J mzJ`z
 " Respect modeline in files
 set modeline
@@ -44,8 +44,8 @@ set secure
 set number
 " Highlight current line
 set cursorline
-" Make tabs as wide as two spaces
-set tabstop=2
+" Make tabs as wide as four spaces
+set tabstop=4
 " Show “invisible” characters
 set lcs=tab:▸\ ,trail:·,eol:¬,nbsp:_
 set list

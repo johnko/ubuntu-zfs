@@ -2,24 +2,43 @@
 set -e
 set -x
 
-export DEBIAN_FRONTEND=noninteractive
+if which apt-get; then
+    export DEBIAN_FRONTEND=noninteractive
+    # Dependency for virtualenv
+    sudo apt-get install --yes build-essential python-dev libffi-dev
+    which virtualenv || sudo apt-get install --yes python-virtualenv
+    # Dependency for ansible
+    sudo apt-get install --yes libssl-dev
+fi
 
-# Dependency for virtualenv
-sudo apt-get install --yes build-essential python-dev libffi-dev
-which virtualenv || sudo apt-get install --yes python-virtualenv
+if ! which virtualenv; then
+    if which pip2; then
+        pip2 install virtualenv
+    fi
+fi
 
-# Dependency for ansible
-sudo apt-get install --yes libssl-dev
+if ! which virtualenv; then
+    if which pip; then
+        pip install virtualenv
+    fi
+fi
+
+if ! which virtualenv; then
+    if which easy_install; then
+        sudo easy_install virtualenv
+    fi
+fi
 
 # Install ansible in a virtualenv
 VENV_FOLDER="venv"
 virtualenv ${VENV_FOLDER}
 . ${VENV_FOLDER}/bin/activate
-pip install --upgrade pip
-pip install --upgrade ansible
+pip2 install --upgrade pip
+pip2 install --upgrade ansible
 
 # Instructions to user
 set +x
+echo "======================================"
 echo "Ansible setup complete!"
 echo "Now you can:"
 echo "    source ${VENV_FOLDER}/bin/activate"
