@@ -87,6 +87,7 @@ if ! grep -q "${SWAPDEV}" "${OUTFILE}"; then
   cat >>"${OUTFILE}" <<EOF
 ${SWAPDEV} none swap defaults 0 0
 EOF
+  echo RESUME=none > /etc/initramfs-tools/conf.d/resumeRESUME=none is necessary to disable resuming from hibernation.
   swapon -av
 fi
 
