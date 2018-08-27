@@ -206,7 +206,7 @@ else
 fi
 zpool create -f -o ashift=12 \
   -O atime=off -O canmount=off -O compression=lz4 -O normalization=formD \
-  -O mountpoint=/ -R "${TARGET}" \
+  -O xattr=sa -O mountpoint=/ -R "${TARGET}" \
   "${ZFS_ROOT_POOL}" ${ZFS_ROOT_ZRAID} ${ZPOOL_VDEVS}
 
 zfs create -o canmount=off -o mountpoint=none "${ZFS_ROOT_POOL}/ROOT"
