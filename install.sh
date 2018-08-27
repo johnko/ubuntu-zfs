@@ -192,7 +192,7 @@ sleep 5
 zpool destroy "${ZFS_ROOT_POOL}" || true
 sleep 2
 for i in ${ZPOOL_VDEVS}; do
-  zpool labelclear "${i}" || true
+  zpool labelclear -f "${i}" || true
 done
 sleep 2
 
