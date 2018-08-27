@@ -2,6 +2,9 @@
 set -e
 set -x
 
+# Ubuntu 18.04 uses netplan, but for now we want ifupdown
+apt-get install --yes ifupdown
+
 OUTFILE="/etc/network/interfaces"
 SOURCEDIR="/etc/network/interfaces.d"
 
