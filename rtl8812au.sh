@@ -2,7 +2,6 @@
 set -e
 set -x
 
-
 if lsusb | grep -q -i "ID 2357:010d"; then
   # need a compiler
   apt install --yes build-essential
