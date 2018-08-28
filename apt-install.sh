@@ -137,6 +137,7 @@ openssh-server
 openntpd
 ntpdate
 net-tools
+software-properties-common
 rsync
 git
 curl
