@@ -10,9 +10,3 @@ apt-get update ; apt-get install --yes git ; git clone --depth=1 https://github.
 vi env.sh
 ./install.sh
 ```
-
-Then on first login:
-
-```
-_firstlogin.sh
-```
