@@ -155,7 +155,7 @@ shellcheck
 python-pygments
 vagrant
 linux-headers-generic
-virtualbox-5.0
+virtualbox-5.2
 "
 
 for i in ${PACKAGES}; do
