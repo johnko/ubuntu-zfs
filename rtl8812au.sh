@@ -9,8 +9,8 @@ if lsusb | grep -q -i "ID 2357:010d"; then
     apt-get update
   fi
   
-  # need a compiler
-  apt-get install --yes build-essential
+  # need a compiler and linux headers
+  apt-get install --yes build-essential linux-headers-generic
 
   # rtl8812au-dkms is driver for TP-Link - Archer T4U AC1300, https://github.com/diederikdehaas/rtl8812AU/pull/105/files
   apt-get install --yes rtl8812au-dkms
