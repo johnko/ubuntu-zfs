@@ -41,6 +41,12 @@ EOF
   # so remove the module
   MP_NAME="8812au"
   modprobe -r ${MP_NAME} || true
+  # uninstall the module
+  dkms uninstall -m ${KMOD_NAME} -v ${KMOD_VER} || true
+  # remove the module source
+  dkms remove -m ${KMOD_NAME} -v ${KMOD_VER} -k $(uname -r) || true
+  # check kernel module is absent
+  lsmod | grep "${MP_NAME}" || true
 
   # manual build
   # libelf-dev needed to compile driver
@@ -49,19 +55,14 @@ EOF
 
   # add the module source
   dkms add -m ${KMOD_NAME} -v ${KMOD_VER} || true
-  # uninstall the module
-  dkms uninstall -m ${KMOD_NAME} -v ${KMOD_VER} || true
-
   # rebuild and reinstall the module
-  dkms build -m ${KMOD_NAME} -v ${KMOD_VER} && dkms install --force -m ${KMOD_NAME} -v ${KMOD_VER}
-
+  dkms build -m ${KMOD_NAME} -v ${KMOD_VER}
+  dkms install --force -m ${KMOD_NAME} -v ${KMOD_VER}
   # load module into kernel
   modprobe ${MP_NAME}
-
   # check if kernel module is present
   lsmod | grep "${MP_NAME}"
 
   # check if link exists
   ip link | grep "wlx"
 fi
-
