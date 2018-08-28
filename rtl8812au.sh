@@ -30,7 +30,7 @@ IFJUTDg4MTJ9LCAvKiBUUC1MaW5rIC0gQXJjaGVyIFQ0VSAqLwogIAl7VVNCX0RFVklDRSgweDIz
 NTcsIDB4MDEwMyksLmRyaXZlcl9pbmZvID0gUlRMODgxMn0sIC8qIFRQLUxpbmsgLSBBcmNoZXIg
 VDRVSCAqLwo=
 EOF
-  patch -N ${RTL_SRC}/os_dep/linux/usb_intf.c "${PATCH_FILE}"
+  patch -N ${RTL_SRC}/os_dep/linux/usb_intf.c "${PATCH_FILE}" || true
 
   # this may have already been added during apt install
   # so remove the module
