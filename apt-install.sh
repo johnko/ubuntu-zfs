@@ -170,48 +170,7 @@ for i in ${PACKAGES}; do
   esac
 done
 
-if lsusb | grep -q -i "ID 2357:010d"; then
-  # rtl8812au-dkms is driver for TP-Link - Archer T4U AC1300, https://github.com/diederikdehaas/rtl8812AU/pull/105/files
-  apt-get install --yes rtl8812au-dkms
-
-  # patch the usb_intf.c file to add the Archer T4U ID
-  base64 -d >/usr/src/rtl8812au-4.3.8.12175.20140902+dfsg/os_dep/linux/usb_intf.c.patch <<EOF
-KioqIHVzYl9pbnRmLmMub3JpZwkyMDE4LTA4LTI3IDIyOjM3OjA3LjYwNDk2NDgzNiAtMDQwMAot
-LS0gdXNiX2ludGYuYwkyMDE4LTA4LTI3IDIyOjQ3OjAyLjEyODAzMTk1MSAtMDQwMAoqKioqKioq
-KioqKioqKioKKioqIDMwNCwzMDUgKioqKgotLS0gMzA0LDMwNiAtLS0tCiAgCXtVU0JfREVWSUNF
-KDB4MjM1NywgMHgwMTAxKSwuZHJpdmVyX2luZm8gPSBSVEw4ODEyfSwgLyogVFAtTGluayAtIEFy
-Y2hlciBUNFUgKi8KKyAJe1VTQl9ERVZJQ0UoMHgyMzU3LCAweDAxMGQpLC5kcml2ZXJfaW5mbyA9
-IFJUTDg4MTJ9LCAvKiBUUC1MaW5rIC0gQXJjaGVyIFQ0VSAqLwogIAl7VVNCX0RFVklDRSgweDIz
-NTcsIDB4MDEwMyksLmRyaXZlcl9pbmZvID0gUlRMODgxMn0sIC8qIFRQLUxpbmsgLSBBcmNoZXIg
-VDRVSCAqLwo=
-EOF
-  patch -N /usr/src/rtl8812au-4.3.8.12175.20140902+dfsg/os_dep/linux/usb_intf.c /usr/src/rtl8812au-4.3.8.12175.20140902+dfsg/os_dep/linux/usb_intf.c.patch
-
-  # manual build
-  # libelf-dev needed to compile driver
-  #apt-get install --yes libelf-dev
-  #cd /usr/src/rtl8812au-4.3.8.12175.20140902+dfsg && make clean && make && make install
-
-  # this may have already been added during apt install
-  # so remove the module
-  modprobe -r 8812au || true
-  # add the module source
-  dkms add -m rtl8812au -v 4.3.8.12175.20140902+dfsg || true
-  # uninstall the module
-  dkms uninstall -m rtl8812au -v 4.3.8.12175.20140902+dfsg || true
-
-  # rebuild and reinstall the module
-  dkms build -m rtl8812au -v 4.3.8.12175.20140902+dfsg && dkms install --force -m rtl8812au -v 4.3.8.12175.20140902+dfsg
-
-  # load module into kernel
-  modprobe 8812au
-
-  # check if kernel module is present
-  lsmod | grep "8812au"
-
-  # check if link exists
-  ip link | grep "wlx"
-fi
+./rtl8812au.sh
 
 if [ "${INSTALL_TYPE}" = "desktop" ] && [ ! -f /etc/system-setup ]; then
   cat >/etc/apt/sources.list.d/spotify.list <<EOF
