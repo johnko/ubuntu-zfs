@@ -11,6 +11,12 @@ if lsusb | grep -q -i "ID 2357:010d"; then
   
   # need a compiler and linux headers
   apt-get install --yes build-essential linux-headers-generic
+  # current kernel may be different
+  KERN_CUR="$( uname -r )"
+  KERN_NEW=$( ls /usr/src/ | grep "linux-headers" | grep "generic" | sed 's;linux-headers-;' )
+  if [ "${KERN_CUR}" != "${KERN_NEW}" ]; then
+    apt-get install --yes linux-headers-${KERN_NEW}
+  fi
 
   # rtl8812au-dkms is driver for TP-Link - Archer T4U AC1300, https://github.com/diederikdehaas/rtl8812AU/pull/105/files
   apt-get install --yes rtl8812au-dkms
@@ -44,8 +50,14 @@ EOF
   modprobe -r ${MP_NAME} || true
   # uninstall the module
   dkms uninstall -m ${KMOD_NAME} -v ${KMOD_VER} || true
+  if [ "${KERN_CUR}" != "${KERN_NEW}" ]; then
+    dkms uninstall -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_NEW} || true
+  fi
   # remove the module source
   dkms remove -m ${KMOD_NAME} -v ${KMOD_VER} -k $(uname -r) || true
+  if [ "${KERN_CUR}" != "${KERN_NEW}" ]; then
+    dkms remove -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_NEW} || true
+  fi
   # check kernel module is absent
   lsmod | grep "${MP_NAME}" || true
 
@@ -56,9 +68,18 @@ EOF
 
   # add the module source
   dkms add -m ${KMOD_NAME} -v ${KMOD_VER} || true
+  if [ "${KERN_CUR}" != "${KERN_NEW}" ]; then
+    dkms add -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_NEW} || true
+  fi
   # rebuild and reinstall the module
   dkms build -m ${KMOD_NAME} -v ${KMOD_VER}
+  if [ "${KERN_CUR}" != "${KERN_NEW}" ]; then
+    dkms build -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_NEW} || true
+  fi
   dkms install -m ${KMOD_NAME} -v ${KMOD_VER}
+  if [ "${KERN_CUR}" != "${KERN_NEW}" ]; then
+    dkms install -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_NEW} || true
+  fi
   # load module into kernel
   modprobe ${MP_NAME}
   # check if kernel module is present
