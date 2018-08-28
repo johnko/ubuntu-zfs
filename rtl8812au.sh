@@ -67,18 +67,21 @@ EOF
   #cd ${RTL_SRC} && make clean && make && make install
 
   # add the module source
-  dkms add -m ${KMOD_NAME} -v ${KMOD_VER} || true
   if [ "${KERN_CUR}" != "${KERN_NEW}" ]; then
     dkms add -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_NEW} || true
+  else
+    dkms add -m ${KMOD_NAME} -v ${KMOD_VER} || true
   fi
   # rebuild and reinstall the module
-  dkms build -m ${KMOD_NAME} -v ${KMOD_VER}
   if [ "${KERN_CUR}" != "${KERN_NEW}" ]; then
-    dkms build -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_NEW} || true
+    dkms build -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_NEW}
+  else
+    dkms build -m ${KMOD_NAME} -v ${KMOD_VER}
   fi
-  dkms install -m ${KMOD_NAME} -v ${KMOD_VER}
   if [ "${KERN_CUR}" != "${KERN_NEW}" ]; then
-    dkms install -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_NEW} || true
+    dkms install -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_NEW}
+  else
+    dkms install -m ${KMOD_NAME} -v ${KMOD_VER}
   fi
   # load module into kernel
   modprobe ${MP_NAME}
