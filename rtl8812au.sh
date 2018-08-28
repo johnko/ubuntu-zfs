@@ -7,6 +7,7 @@ if lsusb | grep -q -i "ID 2357:010d"; then
   apt install --yes build-essential
 
   # rtl8812au-dkms is driver for TP-Link - Archer T4U AC1300, https://github.com/diederikdehaas/rtl8812AU/pull/105/files
+  apt-add-repository universe
   apt-get install --yes rtl8812au-dkms
 
   # driver source folder
