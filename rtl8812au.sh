@@ -3,6 +3,7 @@ set -e
 set -x
 
 if lsusb | grep -q -i "ID 2357:010d"; then
+  which apt-add-repository || apt-get install --yes software-properties-common
   apt-add-repository universe
   if [ -z "${RSYNC_CACHE_SERVER}" ]; then
     apt-get update
