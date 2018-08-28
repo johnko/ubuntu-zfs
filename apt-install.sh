@@ -24,6 +24,13 @@ deb-src http://archive.ubuntu.com/ubuntu ${UBUNTU_CODENAME} main universe
 deb-src http://archive.ubuntu.com/ubuntu ${UBUNTU_CODENAME}-updates main universe
 deb-src http://security.ubuntu.com/ubuntu ${UBUNTU_CODENAME}-security main universe
 EOF
+
+# We need gnupg2 for apt-key add
+if [ -z "${RSYNC_CACHE_SERVER}" ]; then
+  apt-get update
+fi
+apt-get install --yes gnupg2
+
 cat >/etc/apt/sources.list.d/virtualbox.list <<EOF
 deb http://download.virtualbox.org/virtualbox/debian ${UBUNTU_CODENAME} contrib
 EOF
