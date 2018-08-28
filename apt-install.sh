@@ -158,6 +158,7 @@ vagrant
 linux-headers-generic
 virtualbox-5.2
 "
+#mailutils
 
 for i in ${PACKAGES}; do
   case "${i}" in
@@ -265,9 +266,9 @@ filezilla
 chromium-browser
 libxcb-xtest0
 "
-# network-manager-openconnect-gnome
-# spotify-client
-# hipchat4
+#network-manager-openconnect-gnome
+#spotify-client
+#hipchat4
   for i in ${PACKAGES}; do
     case "${i}" in
       *)
