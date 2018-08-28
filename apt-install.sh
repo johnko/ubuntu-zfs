@@ -162,6 +162,11 @@ for i in ${PACKAGES}; do
   esac
 done
 
+if lsusb | grep -q "ID 2357:010d"; then
+  # TP-Link - Archer T4U AC1300, https://github.com/diederikdehaas/rtl8812AU/pull/105/files
+  apt-get install --yes rtl8812au-dkms
+fi
+
 if [ "${INSTALL_TYPE}" = "desktop" ] && [ ! -f /etc/system-setup ]; then
   cat >/etc/apt/sources.list.d/spotify.list <<EOF
 deb http://repository.spotify.com stable non-free
