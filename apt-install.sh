@@ -169,7 +169,7 @@ for i in ${PACKAGES}; do
   esac
 done
 
-if lsusb | grep -q "ID 2357:010d"; then
+if lsusb | grep -q -i "ID 2357:010d"; then
   # TP-Link - Archer T4U AC1300, https://github.com/diederikdehaas/rtl8812AU/pull/105/files
   apt-get install --yes rtl8812au-dkms
 fi
@@ -259,17 +259,17 @@ EOF
   PACKAGES="
 dbus
 xubuntu-desktop
-network-manager-openconnect-gnome
 xsel
 gimp
 inkscape
 audacity
 filezilla
 chromium-browser
-spotify-client
-hipchat4
 libxcb-xtest0
 "
+# network-manager-openconnect-gnome
+# spotify-client
+# hipchat4
   for i in ${PACKAGES}; do
     case "${i}" in
       *)
