@@ -57,7 +57,7 @@ EOF
   dkms add -m ${KMOD_NAME} -v ${KMOD_VER} || true
   # rebuild and reinstall the module
   dkms build -m ${KMOD_NAME} -v ${KMOD_VER}
-  dkms install --force -m ${KMOD_NAME} -v ${KMOD_VER}
+  dkms install -m ${KMOD_NAME} -v ${KMOD_VER}
   # load module into kernel
   modprobe ${MP_NAME}
   # check if kernel module is present
