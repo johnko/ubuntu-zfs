@@ -303,8 +303,8 @@ mount --rbind /sys "${TARGET}/sys"
 cp -a ./ "${TARGET}/root/ubuntu-zfs"
 
 # Copy network configs over to target
-cp -a /etc/netplan/01-network-manager-all.yaml "${TARGET}/etc/netplan/"
-cp -a /etc/NetworkManager/system-connections "${TARGET}/etc/NetworkManager/"
+install -d -m 755 -o root -g root "${TARGET}/etc/NetworkManager/system-connections"
+cp -a /etc/NetworkManager/system-connections/* "${TARGET}/etc/NetworkManager/system-connections/"
 
 chroot "${TARGET}" /root/ubuntu-zfs/system-setup.sh
 
