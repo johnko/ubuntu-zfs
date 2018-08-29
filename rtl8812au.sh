@@ -80,5 +80,5 @@ EOF
   lsmod | grep "${MP_NAME}"
 
   # check that a network interface exists
-  ip link | grep "wlx"
+  #ip link | grep "wlx"
 fi
