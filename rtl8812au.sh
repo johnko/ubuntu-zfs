@@ -21,9 +21,7 @@ if lsusb | grep -q -i "ID 2357:010d"; then
   # current kernel may be different
   # example livecd has linux-headers-4.15.0-29-generic but debootstrap installs linux-headers-4.15.0-33-generic
   KERN_CUR="$( uname -r )"
-  if [ "${KERN_CUR}" != "${KERN_TARGET}" ]; then
-    apt-get install --yes linux-headers-${KERN_TARGET}
-  fi
+  apt-get install --yes linux-headers-${KERN_CUR} linux-headers-${KERN_TARGET}
 
   # rtl8812au-dkms is driver for TP-Link - Archer T4U AC1300, https://github.com/diederikdehaas/rtl8812AU/pull/105/files
   # only install after linux headers are available
