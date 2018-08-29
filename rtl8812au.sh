@@ -13,7 +13,7 @@ if lsusb | grep -q -i "ID 2357:010d"; then
   apt-get install --yes build-essential linux-headers-generic
   # current kernel may be different
   KERN_CUR="$( uname -r )"
-  KERN_NEW=$( ls /usr/src/ | grep "linux-headers" | grep "generic" | sed 's;linux-headers-;;' )
+  KERN_NEW=$( ls /usr/src/ | grep "linux-headers-.*generic" | tail -n 1 | sed 's;linux-headers-;;' )
   if [ "${KERN_CUR}" != "${KERN_NEW}" ]; then
     apt-get install --yes linux-headers-${KERN_NEW}
   fi
