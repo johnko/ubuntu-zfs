@@ -53,3 +53,36 @@ EOF
 chown root: /etc/netplan/01-network-manager-all.yaml
 chmod 644 /etc/netplan/01-network-manager-all.yaml
 
+# example wifi managed by NetworkManager
+install -d -m 755 -o root -g root /etc/NetworkManager
+install -d -m 755 -o root -g root /etc/NetworkManager/system-connections
+cat >>/etc/NetworkManager/system-connections/xxxxxxx <<EOF
+[connection]
+id=xxxxxxx
+uuid=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+type=wifi
+permissions=
+
+[wifi]
+mac-address=xx:xx:xx:xx:xx:xx
+mac-address-blacklist=
+mode=infrastructure
+ssid=xxxxxxx
+
+[wifi-security]
+auth-alg=open
+key-mgmt=wpa-psk
+psk=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+
+[ipv4]
+dns-search=
+method=auto
+
+[ipv6]
+addr-gen-mode=stable-privacy
+dns-search=
+method=auto
+EOF
+chown root: /etc/NetworkManager/system-connections/xxxxxxx
+chmod 600 /etc/NetworkManager/system-connections/xxxxxxx
+
