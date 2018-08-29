@@ -42,3 +42,14 @@ for i in ${UNPLUG_NICS}; do
 EOF
   fi
 done
+
+install -d -m 755 -o root -g root /etc/netplan
+cat >>/etc/netplan/01-network-manager-all.yaml <<EOF
+# Let NetworkManager manage all devices on this system
+network:
+  version: 2
+  renderer: NetworkManager
+EOF
+chown root: /etc/netplan/01-network-manager-all.yaml
+chmod 644 /etc/netplan/01-network-manager-all.yaml
+
