@@ -154,6 +154,7 @@ while ! ping -c 1 archive.ubuntu.com; do
 done
 
 # Get ZFS packages
+which apt-add-repository || apt-get install --yes software-properties-common
 apt-add-repository universe
 if [ -z "${RSYNC_CACHE_SERVER}" ]; then
   apt-get update
