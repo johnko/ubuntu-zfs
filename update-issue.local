@@ -7,7 +7,7 @@ IP=$(/etc/ip.local)
 
 OUTFILE="/etc/issue"
 # Original was:
-# Ubuntu 16.04.2 LTS \n \l
+# Ubuntu 18.04.1 LTS \n \l
 /bin/sed -i "s,${PREFIX}.*,${PREFIX} ${IP}," "${OUTFILE}"
 if ! /bin/grep -q "^${PREFIX}" "${OUTFILE}"; then
   /bin/grep -v '^$' "${OUTFILE}" >"${OUTFILE}.tmp"
