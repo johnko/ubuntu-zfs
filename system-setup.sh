@@ -53,11 +53,16 @@ if [ -d /root/ubuntu-zfs/skel ]; then
   done
 fi
 
+# tracker file
 touch /etc/system-setup
+
+# DOC-4.1
 ./change-hostname.sh "${NEWHOSTNAME}"
 
+# DOC-4.2
 ./setup-network-interfaces.sh
 
+# DOC-4.5
 locale-gen en_US.UTF-8
 #dpkg-reconfigure locales
 OUTFILE="/etc/default/locale"
@@ -73,14 +78,14 @@ ln -sf /usr/share/zoneinfo/America/Toronto /etc/localtime
 
 ln -s /proc/self/mounts /etc/mtab
 
+# DOC-4.6
 ./apt-install.sh
+
+# tracker file
 rm /etc/system-setup
 
-for file in /etc/logrotate.d/*; do
-  if grep -Eq "(^|[^#y])compress" "$file"; then
-    sed -i -r "s/(^|[^#y])(compress)/\1#\2/" "$file"
-  fi
-done
+# DOC-8.3
+./setup-nocompress-logrotate.sh
 
 #service docker stop || true
 #OUTFILE="/etc/default/docker"
@@ -94,25 +99,36 @@ done
 
 ./setup-sshd_config.sh
 
+# DOC-4.9
 addgroup --system lpadmin
 addgroup --system sambashare
 addgroup --system docker
 
+# DOC-5.1
 #grub-probe /
+
+# DOC-5.2
 update-initramfs -c -k all
+
+# DOC-5.3
 OUTFILE="/etc/default/grub"
 if [ -f "${OUTFILE}" ] && [ ! -f "${OUTFILE}.original" ]; then
   cp -a "${OUTFILE}" "${OUTFILE}.original"
 fi
 sed -i 's;quiet splash;;' "${OUTFILE}"
+
+# DOC-5.4
 update-grub
 
+# DOC-5.5
 # Do this twice
 for k in 1 2; do
   sleep 2
+  # DOC-6.8
   for i in ${DISKS}; do
     grub-install "${i}"
   done
+  # DOC-5.6
   ls /boot/grub/*/zfs.mod
 done
 
@@ -148,6 +164,7 @@ ln -sf /etc/init.d/firstboot /etc/rc4.d/S99firstboot
 ln -sf /etc/init.d/firstboot /etc/rc5.d/S99firstboot
 touch /etc/firstboot
 
+# DOC-6.1
 zfs snapshot -r "${ZFS_ROOT_POOL}"@00-install
 
 cat <<EOF

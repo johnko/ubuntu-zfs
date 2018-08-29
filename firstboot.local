@@ -43,6 +43,7 @@ if [ -z "${ZFS_ROOT_POOL}" ]; then
   ZFS_ROOT_POOL=system
 fi
 
+# DOC-6.6
 # add user if not exist
 id "${NEWUSER}" || ./add-user.sh "${NEWUSER}"
 grep -v "GMAIL" ./env.sh >"/home/${NEWUSER}/.env.sh"
@@ -65,6 +66,7 @@ EOF
   fi
 fi
 
+# DOC-7.1
 ZFSSWAPDEV="${ZFS_ROOT_POOL}/swap"
 SWAPDEV="/dev/zvol/${ZFSSWAPDEV}"
 OUTFILE="/etc/fstab"
@@ -78,6 +80,7 @@ if ! zfs list "${ZFSSWAPDEV}"; then
     echo -n '.'
     sleep 1
   done
+  # DOC-7.2
   mkswap -f "${SWAPDEV}"
 fi
 if ! grep -q "${SWAPDEV}" "${OUTFILE}"; then
@@ -88,12 +91,11 @@ if ! grep -q "${SWAPDEV}" "${OUTFILE}"; then
 ${SWAPDEV} none swap defaults 0 0
 EOF
   echo RESUME=none > /etc/initramfs-tools/conf.d/resumeRESUME=none is necessary to disable resuming from hibernation.
+  # DOC-7.3
   swapon -av
 fi
 
 ./apt-install.sh
-
-./setup-nocompress-logrotate.sh
 
 ./setup-networkmanager-dns.sh
 

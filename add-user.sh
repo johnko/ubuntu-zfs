@@ -21,6 +21,7 @@ EOF
 fi
 NEWSKEL="/etc/skel"
 
+# DOC-6.7
 # password is admin
 useradd -d "${NEWHOME}" ${NEWGROUPS} -m -k "${NEWSKEL}" -p '$6$ZukFU3LL$jGgdl2h6oSt/j06odeBaTPyWCwobck.GQA1DJVwEmYkji1DMDMj3WA66dCBpCer5hpavx8ArScr5lLvS4VXMg/' -s /bin/bash -U "${NEWUSER}"
 

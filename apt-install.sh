@@ -12,6 +12,7 @@ while ! ping -c 1 archive.ubuntu.com; do
   sleep 1
 done
 
+# DOC-4.3
 OUTFILE="/etc/apt/sources.list"
 if [ -f "${OUTFILE}" ] && [ ! -f "${OUTFILE}.original" ]; then
   cp -a "${OUTFILE}" "${OUTFILE}.original"
@@ -126,8 +127,10 @@ if [ -z "${RSYNC_CACHE_SERVER}" ]; then
   apt-get update
 fi
 
+# DOC-8.1
 apt-get dist-upgrade --yes
 
+# DOC-8.2a
 PACKAGES="
 ubuntu-minimal
 linux-image-generic
@@ -174,6 +177,7 @@ done
 
 ./rtl8812au.sh
 
+# DOC-8.2b
 if [ "${INSTALL_TYPE}" = "desktop" ] && [ ! -f /etc/system-setup ]; then
   cat >/etc/apt/sources.list.d/spotify.list <<EOF
 deb http://repository.spotify.com stable non-free

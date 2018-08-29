@@ -73,6 +73,8 @@ TARGET="/target"
 
 SIZE=0
 for i in ${DISKS}; do
+  # DOC-2.1
+  # DOC-2.2
   SIZE=$(fdisk -l "${i}" | grep "Disk /dev/" | grep -o "[0-9][0-9]* bytes" | awk '{print $1}')
   if [ ${SIZE} -gt 2199023255040 ]; then
     # g for new gpt table
@@ -153,12 +155,14 @@ while ! ping -c 1 archive.ubuntu.com; do
   sleep 1
 done
 
+# DOC-1.2
 # Get ZFS packages
 which apt-add-repository || apt-get install --yes software-properties-common
 apt-add-repository universe
 if [ -z "${RSYNC_CACHE_SERVER}" ]; then
   apt-get update
 fi
+# DOC-1.5
 apt-get install --yes debootstrap gdisk zfs-initramfs mdadm
 
 # Sync time
@@ -170,7 +174,9 @@ ZDATA_VDEVS=""
 SIZE=0
 NUM_VDEVS=0
 for i in ${DISKS}; do
+  # DOC-2.1
   mdadm --zero-superblock --force "${i}"
+  # DOC-2.2
   SIZE=$(fdisk -l "${i}" | grep "Disk /dev/" | grep -o "[0-9][0-9]* bytes" | awk '{print $1}')
   if [ ${SIZE} -gt 2199023255040 ]; then
     sgdisk -a1 -n2:1M:512M -t2:EF02 "${i}"
@@ -197,6 +203,7 @@ for i in ${ZPOOL_VDEVS}; do
 done
 sleep 2
 
+# DOC-2.3
 # detect single or mirror
 if [ ${NUM_VDEVS} -gt 1 ]; then
   if [ -z "${ZFS_ROOT_ZRAID}" ]; then
@@ -210,9 +217,12 @@ zpool create -f -o ashift=12 \
   -O xattr=sa -O mountpoint=/ -R "${TARGET}" \
   "${ZFS_ROOT_POOL}" ${ZFS_ROOT_ZRAID} ${ZPOOL_VDEVS}
 
+# DOC-3.1
 zfs create -o canmount=off -o mountpoint=none "${ZFS_ROOT_POOL}/ROOT"
+# DOC-3.2
 zfs create -o canmount=noauto -o mountpoint=/ "${ZFS_ROOT_POOL}/ROOT/ubuntu"
 zfs mount "${ZFS_ROOT_POOL}/ROOT/ubuntu"
+# DOC-3.3
 zfs create                 -o setuid=off             "${ZFS_ROOT_POOL}/home"
 zfs create -o mountpoint=/root                       "${ZFS_ROOT_POOL}/home/root"
 zfs create -o canmount=off -o setuid=off -o exec=off "${ZFS_ROOT_POOL}/var"
@@ -264,6 +274,7 @@ if [ -n "${ZFS_DATA_POOL}" ] && [ -n "${ZFS_ROOT_SIZE}" ]; then
     "${ZFS_DATA_POOL}" ${ZFS_DATA_ZRAID} ${ZDATA_VDEVS}
 fi
 
+# DOC-3.5
 chmod 1777 "${TARGET}/var/tmp"
 
 install -d -m 755 "${TARGET}/var/lib"
@@ -279,6 +290,7 @@ rsync -virtP --exclude lock --exclude partial /var/cache/apt/ "${TARGET}/var/cac
 debootstrap "${UBUNTU_CODENAME}" "${TARGET}"
 zfs set devices=off "${ZFS_ROOT_POOL}"
 
+# DOC-4.4
 mount --rbind /dev "${TARGET}/dev"
 mount --rbind /proc "${TARGET}/proc"
 mount --rbind /sys "${TARGET}/sys"
@@ -301,6 +313,7 @@ cp -a /var/log/00-ubuntu-zfs-install.log "${TARGET}/var/log/00-ubuntu-zfs-instal
 
 sync
 
+# DOC-6.3
 mount | grep -v zfs | tac | awk "/\\${TARGET}/ {print \$3}" | xargs -i{} umount -lf {}
 zpool export "${ZFS_ROOT_POOL}"
 
@@ -310,4 +323,5 @@ if mount | grep -q "/cdrom" ; then
   umount -l /cdrom || true
 fi
 
+# DOC-6.4
 reboot -f
