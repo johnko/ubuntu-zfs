@@ -93,6 +93,8 @@ fi
 
 ./apt-install.sh
 
+./setup-nocompress-logrotate.sh
+
 ./setup-networkmanager-dns.sh
 
 ./setup-unattended-upgrades.sh
