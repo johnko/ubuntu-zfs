@@ -50,7 +50,7 @@ EOF
   # this may or may not have already been added during install of rtl8812au-dkms
   MP_NAME="8812au"
   # remove the module if exist
-  lsmod | grep -q "${MP_NAME}" || modprobe -r ${MP_NAME} || true
+  lsmod | grep -q "${MP_NAME}" && modprobe -r ${MP_NAME}
   # uninstall and remove the module for livecd kernel and new kernel
     dkms uninstall -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_CUR} || true
     dkms remove    -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_CUR} || true
