@@ -2,6 +2,11 @@
 set -e
 set -x
 
+KERN_TARGET=${1}
+if [ -z "${KERN_TARGET}" ]; then
+  KERN_TARGET=$( uname -r )
+fi
+
 if lsusb | grep -q -i "ID 2357:010d"; then
 
   # rtl8812au-dkms is in universe
@@ -16,9 +21,8 @@ if lsusb | grep -q -i "ID 2357:010d"; then
   # current kernel may be different
   # example livecd has linux-headers-4.15.0-29-generic but debootstrap installs linux-headers-4.15.0-33-generic
   KERN_CUR="$( uname -r )"
-  KERN_NEW=$( ls /usr/src/ | grep "linux-headers-.*generic" | tail -n 1 | sed 's;linux-headers-;;' )
-  if [ "${KERN_CUR}" != "${KERN_NEW}" ]; then
-    apt-get install --yes linux-headers-${KERN_NEW}
+  if [ "${KERN_CUR}" != "${KERN_TARGET}" ]; then
+    apt-get install --yes linux-headers-${KERN_TARGET}
   fi
 
   # rtl8812au-dkms is driver for TP-Link - Archer T4U AC1300, https://github.com/diederikdehaas/rtl8812AU/pull/105/files
@@ -50,19 +54,19 @@ EOF
   # this may or may not have already been added during install of rtl8812au-dkms
   MP_NAME="8812au"
   # remove the module if exist
-  if lsmod | grep -q "${MP_NAME}"; then
-    modprobe -r ${MP_NAME} || true
-    rmmod ${MP_NAME} || true
+  if [ "${KERN_CUR}" == "${KERN_TARGET}" ]; then
+    if lsmod | grep -q "${MP_NAME}"; then
+      modprobe -r ${MP_NAME} || true
+      rmmod ${MP_NAME} || true
+    fi
   fi
   # uninstall and remove the module for livecd kernel and new kernel
-    dkms uninstall -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_CUR} || true
-    dkms remove    -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_CUR} || true
-  if [ "${KERN_CUR}" != "${KERN_NEW}" ]; then
-    dkms uninstall -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_NEW} || true
-    dkms remove    -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_NEW} || true
-  fi
+  dkms uninstall -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_TARGET} || true
+  dkms remove    -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_TARGET} || true
   # check kernel module is absent (strings are both empty)
-  test "x" == x$( lsmod | grep "${MP_NAME}" )
+  if [ "${KERN_CUR}" == "${KERN_TARGET}" ]; then
+    test "x" == x$( lsmod | grep "${MP_NAME}" )
+  fi
 
   # manual build
   # libelf-dev needed to compile driver
@@ -70,17 +74,14 @@ EOF
   #cd ${RTL_SRC} && make clean && make && make install
 
   # add, build and install the module source for livecd kernel and new kernel
-    dkms add     -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_CUR} || true
-    dkms build   -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_CUR}
-    dkms install -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_CUR}
-  if [ "${KERN_CUR}" != "${KERN_NEW}" ]; then
-    dkms add     -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_NEW} || true
-    dkms build   -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_NEW}
-    dkms install -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_NEW}
-  fi
+  dkms add     -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_TARGET} || true
+  dkms build   -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_TARGET}
+  dkms install -m ${KMOD_NAME} -v ${KMOD_VER} -k ${KERN_TARGET}
   # load module into kernel if not exist, then check that kernel module is present
-  lsmod | grep -q "${MP_NAME}" || modprobe ${MP_NAME}
-  lsmod | grep "${MP_NAME}"
+  if [ "${KERN_CUR}" == "${KERN_TARGET}" ]; then
+    lsmod | grep -q "${MP_NAME}" || modprobe ${MP_NAME}
+    lsmod | grep "${MP_NAME}"
+  fi
 
   # check that a network interface exists
   #ip link | grep "wlx"
