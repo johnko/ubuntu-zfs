@@ -12,9 +12,9 @@ fi
 
 TARGET="/target"
 
-umount -l "${TARGET}/dev"
-umount -l "${TARGET}/proc"
-umount -l "${TARGET}/sys"
+umount -l "${TARGET}/dev" || true
+umount -l "${TARGET}/proc" || true
+umount -l "${TARGET}/sys" || true
 
 zpool destroy "${ZFS_ROOT_POOL}" || true
 if [ -n "${ZFS_DATA_POOL}" ]; then
