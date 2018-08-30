@@ -21,9 +21,9 @@ swanctl --list-sas
 git clone https://github.com/hectcastro/docker-riak.git
 cd docker-riak
 make build
-docker images | egrep riak
+docker images | grep riak
 DOCKER_RIAK_AUTOMATIC_CLUSTERING=1 DOCKER_RIAK_CLUSTER_SIZE=5 make start-cluster
-make test-cluster | egrep -A6 "ring_members"
+make test-cluster | grep -A6 "ring_members"
 curl -i "http://localhost:49160/buckets/test/keys/jimmy" \
           -X PUT \
           -H "Content-type: text/plain" \

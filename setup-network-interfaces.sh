@@ -23,7 +23,7 @@ iface lo inet loopback
 EOF
 fi
 
-ACTIVE_NICS=$(ip link | grep '^[0-9]' | egrep -v '(^docker| lo:|NO-CARRIER)' | cut -d' ' -f2 | cut -d: -f1)
+ACTIVE_NICS=$(ip link | grep '^[0-9]' | grep -E -v '(^docker| lo:|NO-CARRIER)' | cut -d' ' -f2 | cut -d: -f1)
 for i in ${ACTIVE_NICS}; do
   if [ ! -f "${SOURCEDIR}/${i}" ]; then
     cat >"${SOURCEDIR}/${i}" <<EOF

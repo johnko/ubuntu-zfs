@@ -26,4 +26,4 @@ BEAKER_YUM_BASEURL="http://${artifactory_username}:${artifactory_password}@${art
 BEAKER_SSL_CERT_FILE="/opt/puppetlabs/puppet/ssl/cert.pem"
 
 # Show these variables in output to be evaluated by other scripts
-set | egrep '^(http_|https_|no_|USER$|PASSWORD$|artifactory_|BEAKER_|GEM_)' | awk '{print "export "$0}'
+set | grep -E '^(http_|https_|no_|USER$|PASSWORD$|artifactory_|BEAKER_|GEM_)' | awk '{print "export "$0}'

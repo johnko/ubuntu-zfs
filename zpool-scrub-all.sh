@@ -14,7 +14,7 @@ POOLS=$(zpool list -o name,health -H | awk '$2~/^ONLINE/ {print $1}')
 for i in ${POOLS}; do
   if zpool status "${i}" | grep -q "none requested"; then
     zpool scrub "${i}"
-  elif zpool status "${i}" | egrep -q "(scrub in progress|resilver)"; then
+  elif zpool status "${i}" | grep -E -q "(scrub in progress|resilver)"; then
     echo "Scrub already in progress for ${i}"
   else
     LASTSCRUB_DATE=$(zpool status "${i}" | grep scrub | awk '{print $11" "$12" " $13" " $14" "$15}')
