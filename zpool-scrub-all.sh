@@ -14,10 +14,11 @@ for i in ${POOLS}; do
     zpool scrub "${i}"
   elif zpool status "${i}" | egrep -q "(scrub in progress|resilver)"; then
     echo "Scrub already in progress for ${i}"
-  fi
-  LASTSCRUB_DATE=$(zpool status "${i}" | grep scrub | awk '{print $11" "$12" " $13" " $14" "$15}')
-  LASTSCRUB=$(date -d "${LASTSCRUB_DATE}" +%s)
-  if [ $((NOW - LASTSCRUB)) -ge $MAXAGE ]; then
-    zpool scrub "${i}"
+  else
+    LASTSCRUB_DATE=$(zpool status "${i}" | grep scrub | awk '{print $11" "$12" " $13" " $14" "$15}')
+    LASTSCRUB=$(date -d "${LASTSCRUB_DATE}" +%s)
+    if [ $((NOW - LASTSCRUB)) -ge $MAXAGE ]; then
+      zpool scrub "${i}"
+    fi
   fi
 done
