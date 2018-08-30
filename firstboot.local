@@ -114,6 +114,8 @@ fi
 
 ./setup-zfs-auto-snapshot.sh
 
+/sbin/vboxconfig || true
+
 rm "${TRIGGER}"
 
 sync
