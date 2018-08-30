@@ -136,6 +136,7 @@ ubuntu-minimal
 linux-image-generic
 debootstrap gdisk zfs-initramfs mdadm
 grub-pc
+network-manager
 openssh-server
 openntpd
 ntpdate
