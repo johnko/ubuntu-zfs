@@ -227,9 +227,14 @@ zfs create -o setuid=off "${ZFS_ROOT_POOL}/home"
 zfs create -o mountpoint=/root "${ZFS_ROOT_POOL}/home/root"
 zfs create -o canmount=off -o setuid=off -o exec=off "${ZFS_ROOT_POOL}/var"
 zfs create -o com.sun:auto-snapshot=false "${ZFS_ROOT_POOL}/var/cache"
-zfs create -o acltype=posixacl -o xattr=sa "${ZFS_ROOT_POOL}/var/log"
 zfs create "${ZFS_ROOT_POOL}/var/spool"
-zfs create -o com.sun:auto-snapshot=false -o exec=on "${ZFS_ROOT_POOL}/var/tmp"
+# DOC-4.11
+zfs create -o acltype=posixacl -o xattr=sa -o mountpoint=legacy "${ZFS_ROOT_POOL}/var/log"
+mkdir "${TARGET}/var/log"
+mount -t zfs "${ZFS_ROOT_POOL}/var/log" "${TARGET}/var/log"
+zfs create -o com.sun:auto-snapshot=false -o exec=on -o mountpoint=legacy "${ZFS_ROOT_POOL}/var/tmp"
+mkdir "${TARGET}/var/tmp"
+mount -t zfs "${ZFS_ROOT_POOL}/var/tmp" "${TARGET}/var/tmp"
 
 zfs create "${ZFS_ROOT_POOL}/srv"
 

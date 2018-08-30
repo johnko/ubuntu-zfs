@@ -105,8 +105,6 @@ addgroup --system sambashare
 addgroup --system docker
 
 # DOC-4.11
-zfs set mountpoint=legacy "${ZFS_ROOT_POOL}/var/log"
-zfs set mountpoint=legacy "${ZFS_ROOT_POOL}/var/tmp"
 cat >>/etc/fstab <<EOF
 ${ZFS_ROOT_POOL}/var/log /var/log zfs defaults 0 0
 ${ZFS_ROOT_POOL}/var/tmp /var/tmp zfs defaults 0 0
