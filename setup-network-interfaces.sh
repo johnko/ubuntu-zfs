@@ -85,4 +85,3 @@ method=auto
 EOF
 chown root: /etc/NetworkManager/system-connections/xxxxxxx
 chmod 600 /etc/NetworkManager/system-connections/xxxxxxx
-

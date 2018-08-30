@@ -33,22 +33,22 @@ install -d -m 700 -o root -g root /root/.vim/undo
 if [ -d /root/ubuntu-zfs/skel ]; then
   for i in /root/ubuntu-zfs/skel/.* /root/ubuntu-zfs/skel/*; do
     case ${i##*/} in
-      . | ..)
-        echo "Skipping ${i##*/}"
-        ;;
-      *)
-        OUTFILE="/root/${i##*/}"
-        if [ -f "${OUTFILE}" ] && [ ! -f "${OUTFILE}.original" ]; then
-          cp -a "${OUTFILE}" "${OUTFILE}.original"
-        fi
-        [ -f "${i}" ] && install -m 600 -o root -g root "${i}" "${OUTFILE}"
-        if [ -d "${i}" ]; then
-          cp -a "${i}" /root
-          chown -R root:root "${OUTFILE}"
-          # remove group and other permissions
-          find "${OUTFILE}" -exec chmod go-rwx {} \;
-        fi
-        ;;
+    . | ..)
+      echo "Skipping ${i##*/}"
+      ;;
+    *)
+      OUTFILE="/root/${i##*/}"
+      if [ -f "${OUTFILE}" ] && [ ! -f "${OUTFILE}.original" ]; then
+        cp -a "${OUTFILE}" "${OUTFILE}.original"
+      fi
+      [ -f "${i}" ] && install -m 600 -o root -g root "${i}" "${OUTFILE}"
+      if [ -d "${i}" ]; then
+        cp -a "${i}" /root
+        chown -R root:root "${OUTFILE}"
+        # remove group and other permissions
+        find "${OUTFILE}" -exec chmod go-rwx {} \;
+      fi
+      ;;
     esac
   done
 fi

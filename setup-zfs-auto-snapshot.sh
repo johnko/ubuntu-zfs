@@ -18,8 +18,7 @@ if [ -n "${GMAIL_USER}" ]; then
     /etc/cron.hourly/zfs-auto-snapshot \
     /etc/cron.daily/zfs-auto-snapshot \
     /etc/cron.weekly/zfs-auto-snapshot \
-    /etc/cron.monthly/zfs-auto-snapshot \
-    ; do
+    /etc/cron.monthly/zfs-auto-snapshot; do
     sed -i -e "s:^MAILTO=.*:MAILTO=${GMAIL_USER}:g" $i
   done
 fi

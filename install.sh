@@ -36,36 +36,36 @@ if [ -z "${UBUNTU_CODENAME}" ]; then
 fi
 
 case "${INSTALL_TYPE}" in
-  server | desktop)
-    echo "INSTALL_TYPE: ${INSTALL_TYPE}"
-    ;;
-  *)
-    echo "ERROR: invalid env INSTALL_TYPE" >&2
-    exit 1
-    ;;
+server | desktop)
+  echo "INSTALL_TYPE: ${INSTALL_TYPE}"
+  ;;
+*)
+  echo "ERROR: invalid env INSTALL_TYPE" >&2
+  exit 1
+  ;;
 esac
 
 if [ "x" != "x${ZFS_ROOT_ZRAID}" ]; then
   case "${ZFS_ROOT_ZRAID}" in
-    mirror | raidz | raidz1 | raidz2 | raidz3)
-      echo "ZFS_ROOT_ZRAID: ${ZFS_ROOT_ZRAID}"
-      ;;
-    *)
-      echo "ERROR: invalid env ZFS_ROOT_ZRAID" >&2
-      exit 1
-      ;;
+  mirror | raidz | raidz1 | raidz2 | raidz3)
+    echo "ZFS_ROOT_ZRAID: ${ZFS_ROOT_ZRAID}"
+    ;;
+  *)
+    echo "ERROR: invalid env ZFS_ROOT_ZRAID" >&2
+    exit 1
+    ;;
   esac
 fi
 
 if [ "x" != "x${ZFS_DATA_ZRAID}" ]; then
   case "${ZFS_DATA_ZRAID}" in
-    mirror | raidz | raidz1 | raidz2 | raidz3)
-      echo "ZFS_DATA_ZRAID: ${ZFS_DATA_ZRAID}"
-      ;;
-    *)
-      echo "ERROR: invalid env ZFS_DATA_ZRAID" >&2
-      exit 1
-      ;;
+  mirror | raidz | raidz1 | raidz2 | raidz3)
+    echo "ZFS_DATA_ZRAID: ${ZFS_DATA_ZRAID}"
+    ;;
+  *)
+    echo "ERROR: invalid env ZFS_DATA_ZRAID" >&2
+    exit 1
+    ;;
   esac
 fi
 
@@ -223,24 +223,24 @@ zfs create -o canmount=off -o mountpoint=none "${ZFS_ROOT_POOL}/ROOT"
 zfs create -o canmount=noauto -o mountpoint=/ "${ZFS_ROOT_POOL}/ROOT/ubuntu"
 zfs mount "${ZFS_ROOT_POOL}/ROOT/ubuntu"
 # DOC-3.3
-zfs create                 -o setuid=off             "${ZFS_ROOT_POOL}/home"
-zfs create -o mountpoint=/root                       "${ZFS_ROOT_POOL}/home/root"
+zfs create -o setuid=off "${ZFS_ROOT_POOL}/home"
+zfs create -o mountpoint=/root "${ZFS_ROOT_POOL}/home/root"
 zfs create -o canmount=off -o setuid=off -o exec=off "${ZFS_ROOT_POOL}/var"
-zfs create -o com.sun:auto-snapshot=false            "${ZFS_ROOT_POOL}/var/cache"
-zfs create -o acltype=posixacl -o xattr=sa           "${ZFS_ROOT_POOL}/var/log"
-zfs create                                           "${ZFS_ROOT_POOL}/var/spool"
+zfs create -o com.sun:auto-snapshot=false "${ZFS_ROOT_POOL}/var/cache"
+zfs create -o acltype=posixacl -o xattr=sa "${ZFS_ROOT_POOL}/var/log"
+zfs create "${ZFS_ROOT_POOL}/var/spool"
 zfs create -o com.sun:auto-snapshot=false -o exec=on "${ZFS_ROOT_POOL}/var/tmp"
 
-zfs create                                           "${ZFS_ROOT_POOL}/srv"
+zfs create "${ZFS_ROOT_POOL}/srv"
 
-zfs create                                           "${ZFS_ROOT_POOL}/var/games"
+zfs create "${ZFS_ROOT_POOL}/var/games"
 
-zfs create                                           "${ZFS_ROOT_POOL}/var/mail"
+zfs create "${ZFS_ROOT_POOL}/var/mail"
 
 zfs create -o com.sun:auto-snapshot=false \
-           -o mountpoint=/var/lib/nfs                "${ZFS_ROOT_POOL}/var/nfs"
+  -o mountpoint=/var/lib/nfs "${ZFS_ROOT_POOL}/var/nfs"
 
-zfs create -o mountpoint=/var/lib/docker             "${ZFS_ROOT_POOL}/docker"
+zfs create -o mountpoint=/var/lib/docker "${ZFS_ROOT_POOL}/docker"
 
 # only create data pool if root was limited in size
 if [ -n "${ZFS_DATA_POOL}" ] && [ -n "${ZFS_ROOT_SIZE}" ]; then
@@ -258,12 +258,12 @@ if [ -n "${ZFS_DATA_POOL}" ] && [ -n "${ZFS_ROOT_SIZE}" ]; then
       read ZFS_DATA_DESTROY
     fi
     case "${ZFS_DATA_DESTROY}" in
-      [yY])
-        ZFS_DATA_DESTROY=Y
-        ;;
-      *)
-        ZFS_DATA_DESTROY=N
-        ;;
+    [yY])
+      ZFS_DATA_DESTROY=Y
+      ;;
+    *)
+      ZFS_DATA_DESTROY=N
+      ;;
     esac
     if [ "${ZFS_DATA_DESTROY}" = "Y" ]; then
       zpool destroy "${ZFS_DATA_POOL}" || true
@@ -324,7 +324,7 @@ zpool export "${ZFS_ROOT_POOL}"
 
 sync
 
-if mount | grep -q "/cdrom" ; then
+if mount | grep -q "/cdrom"; then
   umount -l /cdrom || true
 fi
 

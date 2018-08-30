@@ -166,17 +166,17 @@ virtualbox-5.2
 
 for i in ${PACKAGES}; do
   case "${i}" in
-    linux-image-generic)
-      apt-get install --yes --no-install-recommends "${i}"
-      ;;
-    *)
-      apt-get install --yes "${i}"
-      ;;
+  linux-image-generic)
+    apt-get install --yes --no-install-recommends "${i}"
+    ;;
+  *)
+    apt-get install --yes "${i}"
+    ;;
   esac
 done
 
 # build wifi driver for next kernel
-./rtl8812au.sh $( ls -d /usr/src/linux-headers*generic | tail -n 1 | sed 's;/usr/src/linux-headers-;;' )
+./rtl8812au.sh $(ls -d /usr/src/linux-headers*generic | tail -n 1 | sed 's;/usr/src/linux-headers-;;')
 
 # DOC-8.2b
 if [ "${INSTALL_TYPE}" = "desktop" ] && [ ! -f /etc/system-setup ]; then
@@ -272,14 +272,14 @@ filezilla
 chromium-browser
 libxcb-xtest0
 "
-#network-manager-openconnect-gnome
-#spotify-client
-#hipchat4
+  #network-manager-openconnect-gnome
+  #spotify-client
+  #hipchat4
   for i in ${PACKAGES}; do
     case "${i}" in
-      *)
-        apt-get install --yes "${i}"
-        ;;
+    *)
+      apt-get install --yes "${i}"
+      ;;
     esac
   done
 

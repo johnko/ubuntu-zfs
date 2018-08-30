@@ -3,8 +3,8 @@ set -e
 set -x
 
 if which xfconf-query; then
-	xfconf-query -c xfce4-power-manager -n -p "/xfce4-power-manager/blank-on-ac" -t int -s 15
-	xfconf-query -c xfce4-power-manager -n -p "/xfce4-power-manager/dpms-enabled" -t bool -s true
+  xfconf-query -c xfce4-power-manager -n -p "/xfce4-power-manager/blank-on-ac" -t int -s 15
+  xfconf-query -c xfce4-power-manager -n -p "/xfce4-power-manager/dpms-enabled" -t bool -s true
 fi
 
 cat >~/.xscreensaver <<EOF

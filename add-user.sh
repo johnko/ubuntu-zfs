@@ -41,22 +41,22 @@ rmdir "${NEWHOME}.original"
 if [ -d /root/ubuntu-zfs/skel ]; then
   for i in /root/ubuntu-zfs/skel/.* /root/ubuntu-zfs/skel/*; do
     case ${i##*/} in
-      . | ..)
-        echo "Skipping ${i##*/}"
-        ;;
-      *)
-        OUTFILE="${NEWHOME}/${i##*/}"
-        if [ -f "${OUTFILE}" ] && [ ! -f "${OUTFILE}.original" ]; then
-          cp -a "${OUTFILE}" "${OUTFILE}.original"
-        fi
-        [ -f "${i}" ] && install -m 600 -o "${NEWUSER}" -g "${NEWUSER}" "${i}" "${OUTFILE}"
-        if [ -d "${i}" ]; then
-          cp -a "${i}" "${NEWHOME}"
-          chown -R "${NEWUSER}:${NEWUSER}" "${OUTFILE}"
-          # remove group and other permissions
-          find "${OUTFILE}" -exec chmod go-rwx {} \;
-        fi
-        ;;
+    . | ..)
+      echo "Skipping ${i##*/}"
+      ;;
+    *)
+      OUTFILE="${NEWHOME}/${i##*/}"
+      if [ -f "${OUTFILE}" ] && [ ! -f "${OUTFILE}.original" ]; then
+        cp -a "${OUTFILE}" "${OUTFILE}.original"
+      fi
+      [ -f "${i}" ] && install -m 600 -o "${NEWUSER}" -g "${NEWUSER}" "${i}" "${OUTFILE}"
+      if [ -d "${i}" ]; then
+        cp -a "${i}" "${NEWHOME}"
+        chown -R "${NEWUSER}:${NEWUSER}" "${OUTFILE}"
+        # remove group and other permissions
+        find "${OUTFILE}" -exec chmod go-rwx {} \;
+      fi
+      ;;
     esac
   done
 fi

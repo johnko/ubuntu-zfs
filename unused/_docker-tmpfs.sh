@@ -40,13 +40,13 @@ function bkp_dtmpfs() {
 }
 
 case "${1}" in
-  stop)
-    stop_dtmpfs
-    ;;
-  bkp | backup)
-    bkp_dtmpfs
-    ;;
-  *)
-    start_dtmpfs
-    ;;
+stop)
+  stop_dtmpfs
+  ;;
+bkp | backup)
+  bkp_dtmpfs
+  ;;
+*)
+  start_dtmpfs
+  ;;
 esac
