@@ -22,4 +22,3 @@ if [ -n "${ZFS_DATA_POOL}" ]; then
 fi
 
 ./install.sh
-
