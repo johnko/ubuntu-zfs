@@ -269,7 +269,7 @@ if [ -n "${ZFS_DATA_POOL}" ] && [ -n "${ZFS_ROOT_SIZE}" ]; then
       zpool destroy "${ZFS_DATA_POOL}" || true
       sleep 2
       for i in ${ZDATA_VDEVS}; do
-        zpool labelclear "${i}" || true
+        zpool labelclear -f "${i}" || true
       done
       sleep 2
     fi
