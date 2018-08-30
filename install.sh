@@ -307,9 +307,11 @@ mount --rbind /sys "${TARGET}/sys"
 
 cp -a ./ "${TARGET}/root/ubuntu-zfs"
 
-# Copy network configs over to target
-install -d -m 755 -o root -g root "${TARGET}/etc/NetworkManager/system-connections"
-cp -a /etc/NetworkManager/system-connections/* "${TARGET}/etc/NetworkManager/system-connections/"
+if [ $(find /etc/NetworkManager/system-connections -type f | wc -l) -gt 0 ]; then
+  # Copy network configs over to target
+  install -d -m 755 -o root -g root "${TARGET}/etc/NetworkManager/system-connections"
+  cp -a /etc/NetworkManager/system-connections/* "${TARGET}/etc/NetworkManager/system-connections/"
+fi
 
 chroot "${TARGET}" /root/ubuntu-zfs/system-setup.sh
 
