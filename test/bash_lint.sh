@@ -81,14 +81,12 @@ test_shellcheck() {
   # This test uses shellcheck to check logic and attempt to find errors.
   local filename="${1}"
   output_filename "${filename}"
-  if ! "${BIN_SHELLCHECK}" "${filename}" >/dev/null; then
+  SHELLCHECK_OPTS="--color=always --exclude=SC2230"
+  if ! "${BIN_SHELLCHECK}" ${SHELLCHECK_OPTS} "${filename}" >/dev/null; then
     output_error "${TEST_TYPE}"
-    # - Use 'script' to make it think it is in a TTY
-    # this is to preserve color in old version of shellcheck that
-    # did not support --color=always.
     # - Use awk to add spaces before the output to make it human readable.
-    script --return --command "${BIN_SHELLCHECK} ${filename}" /dev/null |
-      grep -v 'Script .*, file is /dev/null' | awk '{print "\t"$0}' ||
+    "${BIN_SHELLCHECK}" ${SHELLCHECK_OPTS} "${filename}" |
+      awk '{print "\t"$0}' ||
       true
     FOUND_ERROR=1
   else
