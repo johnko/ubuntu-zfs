@@ -176,7 +176,7 @@ for i in ${PACKAGES}; do
 done
 
 # build wifi driver for next kernel
-./rtl8812au.sh $( ls /usr/src/ | grep "linux-headers-.*generic" | tail -n 1 | sed 's;linux-headers-;;' )
+./rtl8812au.sh $( ls -d /usr/src/linux-headers*generic | tail -n 1 | sed 's;/usr/src/linux-headers-;;' )
 
 # DOC-8.2b
 if [ "${INSTALL_TYPE}" = "desktop" ] && [ ! -f /etc/system-setup ]; then
