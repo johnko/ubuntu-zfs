@@ -34,7 +34,8 @@ Subsystem sftp /usr/lib/openssh/sftp-server -f AUTHPRIV -l INFO
 PermitRootLogin No
 # Use kernel sandbox mechanisms where possible in unprivilegied processes
 # Systrace on OpenBSD, Seccomp on Linux, seatbelt on MacOSX/Darwin, rlimit elsewhere.
-UsePrivilegeSeparation sandbox
+# Deprecated option UsePrivilegeSeparation since at least OpenSSH_7.6p1 Ubuntu-4, OpenSSL 1.0.2n  7 Dec 2017
+#UsePrivilegeSeparation sandbox
 # If this option is set to “no” (the default) then only addresses and not host names may be used in ~/.ssh/known_hosts from and sshd_config Match Host directives.
 UseDNS no
 # ets a timeout interval in seconds after which if no data has been received from the client, sshd(8) will send a message through the encrypted channel to request a response from the client.
