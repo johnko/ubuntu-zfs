@@ -146,6 +146,7 @@ rsync
 git
 curl
 wget
+vim
 ubuntu-standard
 nullmailer
 docker.io
