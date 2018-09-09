@@ -163,6 +163,7 @@ python-pygments
 vagrant
 linux-headers-generic
 virtualbox-5.2
+packer
 "
 #mailutils
 
