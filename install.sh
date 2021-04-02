@@ -245,7 +245,8 @@ zfs create "${ZFS_ROOT_POOL}/var/mail"
 zfs create -o com.sun:auto-snapshot=false \
   -o mountpoint=/var/lib/nfs "${ZFS_ROOT_POOL}/var/nfs"
 
-zfs create -o mountpoint=/var/lib/docker "${ZFS_ROOT_POOL}/docker"
+zfs create -o com.sun:auto-snapshot=false \
+  -o mountpoint=/var/lib/docker "${ZFS_ROOT_POOL}/docker"
 
 # only create data pool if root was limited in size
 if [ -n "${ZFS_DATA_POOL}" ] && [ -n "${ZFS_ROOT_SIZE}" ]; then
