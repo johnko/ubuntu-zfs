@@ -1,8 +1,6 @@
 # Ubuntu 18.04 Root on ZFS
 
-Based on https://github.com/zfsonlinux/zfs/wiki/Ubuntu-16.04-Root-on-ZFS 
-
-and https://github.com/zfsonlinux/zfs/wiki/Ubuntu-18.04-Root-on-ZFS
+Based on https://openzfs.github.io/openzfs-docs/Getting%20Started/Ubuntu/Ubuntu%2018.04%20Root%20on%20ZFS.html
 
 # Warning: This will erase your hard drive
 
