@@ -22,7 +22,9 @@ Now as `root` user:
 
 ```
 apt-get update ; apt-get install --yes git ; git clone --depth=1 https://github.com/johnko/ubuntu-zfs ; cd ubuntu-zfs
+
 # edit env.sh
 vi env.sh
+
 ./install.sh
 ```
