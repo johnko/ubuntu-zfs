@@ -1,6 +1,6 @@
-# Ubuntu 18.04 Root on ZFS
+# Ubuntu 20.04 Root on ZFS
 
-Based on https://openzfs.github.io/openzfs-docs/Getting%20Started/Ubuntu/Ubuntu%2018.04%20Root%20on%20ZFS.html
+Based on https://openzfs.github.io/openzfs-docs/Getting%20Started/Ubuntu/Ubuntu%2020.04%20Root%20on%20ZFS.html
 
 # Warning: This will erase your hard drive
 

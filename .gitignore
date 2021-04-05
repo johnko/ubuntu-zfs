@@ -1,1 +1,4 @@
+.vagrant/
+ubuntu-20.04.2.0-desktop-amd64.iso
+Vagrantfile
 zfs-auto-snapshot
