@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-ip link |
-  grep -o -E 'wlx[0-9a-z]*'
